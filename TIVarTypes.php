@@ -15,6 +15,7 @@ class TIVarTypes
         'Unknown'             => -1,
 
         /* Standard types */
+        /* TODO: Support Read/Write, except for 0x0B and 0x16 */
         'Real'                => 0x00,
         'RealList'            => 0x01,
         'Matrix'              => 0x02,
@@ -37,6 +38,7 @@ class TIVarTypes
         'CImage'              => 0x1A,
 
         /* Exact values (TI-83 Premium CE) */
+        /* TODO: Support Read/Write - See https://docs.google.com/document/d/1P_OUbnZMZFg8zuOPJHAx34EnwxcQZ8HER9hPeOQ_dtI */
         'ExactComplexFrac'    => 0x1B,
         'ExactRealRadical'    => 0x1C,
         'ExactComplexRadical' => 0x1D,
@@ -46,18 +48,13 @@ class TIVarTypes
         'ExactRealPiFrac'     => 0x21,
 
         /* System/Flash-related things */
+        /* TODO: Support Read (info), and Read/Write for clock */
         'OperatingSystem'     => 0x23,
         'FlashApp'            => 0x24,
         'Certificate'         => 0x25,
         'CertificateMemory'   => 0x27,
         'Clock'               => 0x29,
-        'FlashLicense'        => 0x3E,
-
-        /* Equations */
-        'EquationFunction'    => 0x90,
-        'EquationParametric'  => 0x91,
-        'EquationPolar'       => 0x92,
-        'EquationSequence'    => 0x93,
+        'FlashLicense'        => 0x3E
     ];
 
     /**
