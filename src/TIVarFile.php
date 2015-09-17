@@ -8,11 +8,9 @@
 
 namespace tivars;
 
-use tivars\TIVarType;
+include_once "BinaryFile.php";
 
-include_once "BinaryReadableFile.php";
-
-class TIVarFile extends BinaryReadableFile
+class TIVarFile extends BinaryFile
 {
 
     private $header = null;

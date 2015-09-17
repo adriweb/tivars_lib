@@ -8,7 +8,7 @@
 
 namespace tivars;
 
-class BinaryReadableFile
+class BinaryFile
 {
     protected $file = null;
     protected $filePath = null;

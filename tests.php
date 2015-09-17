@@ -6,7 +6,7 @@
  * License: MIT
  */
 
-include_once "autoloader.php";
+include_once "src/autoloader.php";
 
 use tivars\TIVarFile;
 use tivars\TIVarType;
