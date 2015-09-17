@@ -6,14 +6,16 @@
  * License: MIT
  */
 
-namespace tivars;
-
 include_once "autoloader.php";
+
+use tivars\TIVarType;
 
 /* TODO: Use PHPUnit */
 
+/* Types */
 $expected = 32;
-$actual   = TIVarTypes::getTypeIdFromString("ExactRealPi");
-echo "$expected === " . 'TIVarTypes::getTypeIdFromString("ExactRealPi")' . " ?\t" . ($expected === $actual ? 'true' : 'false');
+$actual = TIVarType::getIDFromName("ExactRealPi");
+echo "$expected === " . 'TIVarTypes::getTypeIdFromString("ExactRealPi")' . " ?\t" . ($expected === $actual ? 'true' : 'false') . "\n";
+
 
 ?>
