@@ -8,8 +8,6 @@
 
 namespace tivars;
 
-require "autoloader.php";
-
 interface TIVar
 {
     // TODO
