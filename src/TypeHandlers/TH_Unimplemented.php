@@ -12,12 +12,12 @@ include_once "ITypeHandler.php";
 
 class TH_Unimplemented implements ITIVarTypeHandler
 {
-    public function makeFromString($str = '')
+    public function makeDataFromString($str = '')
     {
         echo "This type is not supported / implemented (yet?)";
     }
 
-    public function makeFromData($data = null)
+    public function makeStringFromData($data = null)
     {
         echo "This type is not supported / implemented (yet?)";
     }
