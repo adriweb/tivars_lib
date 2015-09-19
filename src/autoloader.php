@@ -6,6 +6,7 @@
  * License: MIT
  */
 
+include_once "TIVarTypes.php";
 include_once "TIVarType.php";
 include_once "TIVarFile.php";
 
