@@ -18,15 +18,20 @@ class BinaryFile
      * @param null $filePath
      * @throws \Exception
      */
-    public function __construct($filePath = null)
+    protected function __construct($filePath = null)
     {
-        $this->file = fopen($filePath, 'rb+');
-        if ($this->file === false)
+        if ($filePath !== null)
         {
-            throw new \Exception("Can't open the input file");
+            $this->file = fopen($filePath, 'rb+');
+            if ($this->file === false)
+            {
+                throw new \Exception("Can't open the input file");
+            }
+            $this->filePath = $filePath;
+            $this->fileSize = fstat($this->file)['size'];
+        } else {
+            throw new \Exception("No file path given");
         }
-        $this->filePath = $filePath;
-        $this->fileSize = fstat($this->file)['size'];
     }
 
     /**
