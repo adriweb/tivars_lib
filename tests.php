@@ -15,7 +15,7 @@ use tivars\TIVarType;
 
 /* Types */
 $expected = 32;
-$actual = TIVarType::getIDFromName("ExactRealPi");
+$actual = TIVarTypes::getIDFromName("ExactRealPi");
 echo "$expected === " . 'TIVarTypes::getTypeIdFromString("ExactRealPi")' . " ?\t" . ($expected === $actual ? 'true' : 'false') . "\n";
 
 

@@ -12,7 +12,6 @@ include_once "BinaryFile.php";
 
 class TIVarFile extends BinaryFile
 {
-
     private $header = null;
     private $varEntry = null;
     private $type = null;
@@ -20,6 +19,7 @@ class TIVarFile extends BinaryFile
     private $inFileChecksum = null;
 
 
+    /*** Constructor ***/
     public function __construct($filePath = null)
     {
         parent::__construct($filePath);
@@ -27,9 +27,11 @@ class TIVarFile extends BinaryFile
         $this->makeVarEntry();
         $this->computedChecksum = $this->computeChecksum();
         $this->inFileChecksum = $this->getInFileChecksum();
-        $this->type = $this->determineType();
+        $this->type = TIVarType::createFromID($this->varEntry['typeID']);
     }
 
+
+    /*** Makers ***/
     private function makeHeader()
     {
         rewind($this->file);
@@ -55,6 +57,8 @@ class TIVarFile extends BinaryFile
         $this->varEntry['data']         = $this->get_raw_bytes($this->varEntry['data_length']);
     }
 
+
+    /*** Getters ***/
     public function getHeader()
     {
         return $this->header;
@@ -70,24 +74,20 @@ class TIVarFile extends BinaryFile
         return $this->type;
     }
 
-    public function getSubType()
+    public function getTypeHandler()
     {
-        rewind($this->file);
-        // TODO
+        return $this->type->getTypeHandler();
     }
 
+
+    /*** Utils. ***/
     public function isValid()
     {
         return $this->computedChecksum === $this->inFileChecksum;
     }
 
-    // To override in subclasses (especially for programs, to detokenize)
-    public function getFormattedData()
-    {
-        rewind($this->file);
-        // TODO
-    }
 
+    /*** Actions ***/
     public function fixChecksum()
     {
         if (!$this->isValid())
@@ -114,14 +114,6 @@ class TIVarFile extends BinaryFile
     {
         fseek($this->file, $this->fileSize - 2);
         return $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
-    }
-
-    /**
-     * @return \tivars\TIVarType
-     */
-    private function determineType()
-    {
-        return TIVarType::createFromID($this->varEntry['typeID']);
     }
 
 }
