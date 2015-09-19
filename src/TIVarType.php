@@ -20,6 +20,30 @@ class TIVarType
     private $typeHandler = null;
 
     /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @return array
+     */
+    public function getExts()
+    {
+        return $this->exts;
+    }
+
+    /**
      * @return ITIVarTypeHandler
      */
     public function getTypeHandler()
