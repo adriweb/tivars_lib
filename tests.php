@@ -9,7 +9,7 @@
 include_once "src/autoloader.php";
 
 use tivars\TIVarFile;
-use tivars\TIVarType;
+use tivars\TIVarTypes;
 
 /* TODO: Use PHPUnit */
 
