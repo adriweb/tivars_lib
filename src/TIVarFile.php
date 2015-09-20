@@ -39,8 +39,8 @@ class TIVarFile extends BinaryFile
 
     /**
      * Internal constructor, called from loadFromFile and createNew.
-     * @param null $filePath
-     * @throws \Exception
+     * @param   string  $filePath
+     * @throws  \Exception
      */
     protected function __construct($filePath = '')
     {
@@ -48,6 +48,10 @@ class TIVarFile extends BinaryFile
         {
             $this->isFromFile = true;
             parent::__construct($filePath);
+            if ($this->fileSize < 76) // bare minimum for header + a var entry
+            {
+                throw new \Exception("This file is not a valid TI-[e]z80 variable file");
+            }
             $this->makeHeaderFromFile();
             $this->makeVarEntryFromFile();
             $this->computedChecksum = $this->computeChecksumFromFileData();

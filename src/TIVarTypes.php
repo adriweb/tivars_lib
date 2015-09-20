@@ -91,7 +91,7 @@ abstract class TIVarTypes
     }
 
     /**
-     * @param   string  $name    The type name
+     * @param   string  $name   The type name
      * @return  int             The type ID for that name
      */
     public static function getIDFromName($name = '')

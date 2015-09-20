@@ -33,12 +33,19 @@ class TH_0x05 implements ITIVarTypeHandler
 
     /**
      * Detokenizer
+     *
      * @param   array   $data       The bytes (tokens) array
      * @param   array   $options    Associative array of options such as ['lang' => 'fr']
      * @return  string  The program source as a string (detokenized)
+     * @throws  \Exception
      */
     public function makeStringFromData(array $data = [], array $options = [])
     {
+        if ($data === [])
+        {
+            throw new \Exception("Empty data array. Needs to contain at least 2 bytes (size fields)");
+        }
+
         $langIdx = (isset($options['lang']) && $options['lang'] === 'fr') ? 1 : 0;
 
         $howManyBytes = $data[0] + ($data[1] << 8);
@@ -69,6 +76,7 @@ class TH_0x05 implements ITIVarTypeHandler
 
         return $str;
     }
+
 
     public static function initTokens()
     {
