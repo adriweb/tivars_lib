@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITypeHandler.php";
+include_once "ITIVarTypeHandler.php";
 
 class TH_Unimplemented implements ITIVarTypeHandler
 {
