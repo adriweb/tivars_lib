@@ -13,12 +13,25 @@ include_once "ITIVarTypeHandler.php";
 // Type Handler for type 0x05: Program
 class TH_0x05 implements ITIVarTypeHandler
 {
-    public function makeDataFromString($str = '')
+    /**
+     * Tokenizer
+     * @param   string  $str        The program source as a string
+     * @param   array   $options    Associative array of options such as ['lang' => 'fr']
+     * @return  array   The bytes (tokens) array
+     */
+    public function makeDataFromString($str = '', array $options = [])
     {
         // TODO: tokenize.
     }
 
-    public function makeStringFromData($data = null)
+
+    /**
+     * Detokenizer
+     * @param   array   $data       The bytes (tokens) array
+     * @param   array   $options    Associative array of options such as ['lang' => 'fr']
+     * @return  string  The program source as a string (detokenized)
+     */
+    public function makeStringFromData(array $data = [], array $options = [])
     {
         // TODO: detokenize.
     }

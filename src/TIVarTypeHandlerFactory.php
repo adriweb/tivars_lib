@@ -11,6 +11,7 @@ namespace tivars;
 class TIVarTypeHandlerFactory
 {
     /**
+     * Factory of Type Handlers
      * @param   int $typeID The type ID to get the handler of
      * @return  TypeHandlers\ITIVarTypeHandler
      */

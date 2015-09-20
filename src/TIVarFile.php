@@ -152,7 +152,8 @@ class TIVarFile extends BinaryFile
     /*** Utils. ***/
     public function isValid()
     {
-        return ($this->isFromFile) ? ($this->computedChecksum === $this->inFileChecksum) : ($this->computedChecksum !== null);
+        return ($this->isFromFile) ? ($this->computedChecksum === $this->inFileChecksum)
+                                   : ($this->computedChecksum !== null);
     }
 
 
@@ -218,9 +219,9 @@ class TIVarFile extends BinaryFile
         }
     }
 
-    public function setContentFromString($str = '')
+    public function setContentFromString($str = '', $options = [])
     {
-        $this->varEntry['data'] = $this->type->getTypeHandler()->makeDataFromString($str);
+        $this->varEntry['data'] = $this->type->getTypeHandler()->makeDataFromString($str, $options);
         $this->computedChecksum = $this->computeChecksumFromInstanceData();
     }
 
@@ -229,9 +230,9 @@ class TIVarFile extends BinaryFile
         return $this->varEntry['data'];
     }
 
-    public function getReadableContent()
+    public function getReadableContent($options = [])
     {
-        return $this->type->getTypeHandler()->makeStringFromData($this->varEntry['data']);
+        return $this->type->getTypeHandler()->makeStringFromData($this->varEntry['data'], $options);
     }
 
     public function saveVarToFile($filePath = '')

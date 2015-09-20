@@ -10,7 +10,7 @@ namespace tivars\TypeHandlers;
 
 interface ITIVarTypeHandler
 {
-    public function makeDataFromString($str = '');
+    public function makeDataFromString($str = '', array $options = []);
 
-    public function makeStringFromData($data = null);
+    public function makeStringFromData(array $data = [], array $options = []);
 }
