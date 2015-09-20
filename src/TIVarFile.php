@@ -37,6 +37,9 @@ class TIVarFile extends BinaryFile
 
     // TODO: Handle multiple varEntries
 
+
+    /*** Constructors ***/
+
     /**
      * Internal constructor, called from loadFromFile and createNew.
      * @param   string  $filePath
@@ -110,6 +113,7 @@ class TIVarFile extends BinaryFile
 
 
     /*** Makers ***/
+
     private function makeHeaderFromFile()
     {
         rewind($this->file);
@@ -137,6 +141,7 @@ class TIVarFile extends BinaryFile
 
 
     /*** Getters ***/
+
     public function getHeader()
     {
         return $this->header;
@@ -154,6 +159,7 @@ class TIVarFile extends BinaryFile
 
 
     /*** Utils. ***/
+
     public function isValid()
     {
         return ($this->isFromFile) ? ($this->computedChecksum === $this->inFileChecksum)
@@ -161,21 +167,7 @@ class TIVarFile extends BinaryFile
     }
 
 
-    /*** Actions ***/
-    public function fixChecksumInFile()
-    {
-        if ($this->isFromFile)
-        {
-            if (!$this->isValid())
-            {
-                fseek($this->file, $this->fileSize - 2);
-                fwrite($this->file, chr($this->computedChecksum & 0xFF) . chr($this->computedChecksum >> 8));
-                $this->inFileChecksum = $this->getChecksumValueFromFile();
-            }
-        } else {
-            echo "[Error] No file loaded";
-        }
-    }
+    /*** Private actions ***/
 
     public function computeChecksumFromFileData()
     {
@@ -200,7 +192,7 @@ class TIVarFile extends BinaryFile
         return array_sum($this->varEntry['data']) & 0xFFFF;
     }
 
-    public function getChecksumValueFromFile()
+    private function getChecksumValueFromFile()
     {
         if ($this->isFromFile)
         {
@@ -212,12 +204,29 @@ class TIVarFile extends BinaryFile
         }
     }
 
-    public function setContentFromData($data = null)
+    /**
+     *  Updates the length fields in both the header and the var entry, as well as the checksum
+     */
+    private function refreshMetadataFields()
     {
-        if ($data !== null)
+        $oldVarEntryLen = $this->varEntry['data_length'];
+        $this->varEntry['data_length'] = $this->varEntry['data_length2'] = count($this->varEntry['data']);
+        $this->header['entries_len'] += $this->varEntry['data_length'] - $oldVarEntryLen;
+        $this->computedChecksum = $this->computeChecksumFromInstanceData();
+    }
+
+
+    /*** Public actions **/
+
+    /**
+    * @param    array   $data   The array of bytes
+    */
+    public function setContentFromData(array $data = [])
+    {
+        if ($data !== [])
         {
             $this->varEntry['data'] = $data;
-            $this->computedChecksum = $this->computeChecksumFromInstanceData();
+            $this->refreshMetadataFields();
         } else {
             echo "[Error] No data given";
         }
@@ -226,7 +235,7 @@ class TIVarFile extends BinaryFile
     public function setContentFromString($str = '', $options = [])
     {
         $this->varEntry['data'] = $this->type->getTypeHandler()->makeDataFromString($str, $options);
-        $this->computedChecksum = $this->computeChecksumFromInstanceData();
+        $this->refreshMetadataFields();
     }
 
     public function getRawContent()
@@ -237,6 +246,21 @@ class TIVarFile extends BinaryFile
     public function getReadableContent($options = [])
     {
         return $this->type->getTypeHandler()->makeStringFromData($this->varEntry['data'], $options);
+    }
+
+    public function fixChecksumInFile()
+    {
+        if ($this->isFromFile)
+        {
+            if (!$this->isValid())
+            {
+                fseek($this->file, $this->fileSize - 2);
+                fwrite($this->file, chr($this->computedChecksum & 0xFF) . chr($this->computedChecksum >> 8));
+                $this->inFileChecksum = $this->getChecksumValueFromFile();
+            }
+        } else {
+            echo "[Error] No file loaded";
+        }
     }
 
     public function saveVarToFile($filePath = '')
