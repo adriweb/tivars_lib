@@ -32,7 +32,7 @@ class TH_0x00 implements ITIVarTypeHandler
         $number     = '';
         for ($i = 2; $i < 8; $i++)
         {
-            $number .= dechex((string)$data[$i]);
+            $number .= dechex($data[$i]);
         }
         $number = substr($number, 0, 1) . '.' . substr($number, 1);
         $number = ($isNegative ? -1 : 1) * pow(10, $exponent) * ((float)$number);
