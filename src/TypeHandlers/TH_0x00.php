@@ -30,7 +30,7 @@ class TH_0x00 implements ITIVarTypeHandler
 //      $isUndef    = ($flags  & 1 === 1); // if true, "used for initial sequence values"
         $exponent   = $data[1] - 0x80;
         $number     = '';
-        for ($i = 2; $i < 8; $i++)
+        for ($i = 2; $i < 9; $i++)
         {
             $number .= dechex($data[$i]);
         }
