@@ -93,17 +93,17 @@ class TIVarFile extends BinaryFile
                 'signature'     =>  "**TI83F*",
                 'sig_extra'     =>  [ 0x1A, 0x0A, 0x00 ],
                 'comment'       =>  str_pad("Created by tivars_lib on " . date("M j, Y"), 42, "\0"),
-                'entries_len'   =>  [ 0x00, 0x00 ] // will have to be overwritten later
+                'entries_len'   =>  0 // will have to be overwritten later
             ];
             $instance->varEntry = [
                 'constBytes'    =>  [ 0x0B, 0x00 ],
-                'data_length'   =>  [ 0x00, 0x00 ], // will have to be overwritten later
+                'data_length'   =>  0, // will have to be overwritten later
                 'typeID'        =>  $type->getId(),
                 'varname'       =>  str_pad($name, 8, "\0"),
                 'version'       =>  0,
                 'archivedFlag'  =>  0, // TODO: check when that needs to be 1.
-                'data_length2'  =>  [ 0x00, 0x00 ], // will have to be overwritten later
-                'data'          =>  null // will have to be overwritten later
+                'data_length2'  =>  0, // will have to be overwritten later
+                'data'          =>  [] // will have to be overwritten later
             ];
             return $instance;
         } else {
