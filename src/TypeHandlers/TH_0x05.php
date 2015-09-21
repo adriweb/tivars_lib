@@ -47,24 +47,24 @@ class TH_0x05 implements ITIVarTypeHandler
 
         $langIdx = (isset($options['lang']) && $options['lang'] === 'fr') ? 1 : 0;
 
-        $howManyBytes = $data[0] + ($data[1] << 8);
+        $howManyBytes = ($data[0] & 0xFF) + (($data[1] << 8) & 0xFF00);
         array_shift($data); array_shift($data);
         if ($howManyBytes !== count($data))
         {
-            echo "[Warning] Token count (" . count($data) . ") and size field (" . $howManyBytes . ") mismatch!";
+            trigger_error("[Warning] Token count (" . count($data) . ") and size field (" . $howManyBytes . ") mismatch!");
         }
 
         $str = '';
-        for ($i = 0; $i<$howManyBytes; $i++)
+        for ($i = 0; $i < $howManyBytes; $i++)
         {
             $currentToken = $data[$i];
-            $nextToken = ($i < $howManyBytes) ? $data[$i+1] : null;
+            $nextToken = ($i < $howManyBytes-1) ? $data[$i+1] : null;
             $bytesKey = $currentToken;
             if (in_array($currentToken, self::$firstByteOfTwoByteTokens))
             {
                 if ($nextToken === null)
                 {
-                    echo "[Warning] Encountered an unfinished two-byte token! Setting the second byte to 0x00\n";
+                    trigger_error("[Warning] Encountered an unfinished two-byte token! Setting the second byte to 0x00");
                     $nextToken = 0x00;
                 }
                 $bytesKey = $nextToken + ($currentToken << 8);
