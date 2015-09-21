@@ -20,14 +20,33 @@ class TH_0x05 implements ITIVarTypeHandler
 
     /**
      * Tokenizer
+     *
      * @param   string  $str        The program source as a string
-     * @param   array   $options    Associative array of options such as ['lang' => 'fr']
-     * @return  array   The bytes (tokens) array
+     * @param   array   $options    Ignored here (French and English token names supported by default)
+     * @return  array   The bytes (tokens) array (the two first ones are the size of the rest)
      */
     public static function makeDataFromString($str = '', array $options = [])
     {
-        // TODO: tokenize.
-        return [];
+        $data = [ 0, 0 ]; // two bytes reserved for the size. Filled later
+        for ($strCursorPos = 0; $strCursorPos < mb_strlen($str); $strCursorPos++)
+        {
+            for ($currentLength = self::$lengthOfLongestTokenName; $currentLength > 0; $currentLength--)
+            {
+                $currentSubString = mb_substr($str, $strCursorPos, $currentLength);
+                if (isset(self::$tokens_NameToBytes[$currentSubString]))
+                {
+                    $tokenValue = self::$tokens_NameToBytes[$currentSubString];
+                    ($tokenValue > 0xFF) && array_push($data, $tokenValue >> 8);
+                    array_push($data, $tokenValue & 0xFF);
+                    $strCursorPos += $currentLength - 1;
+                    break;
+                }
+            }
+        }
+        $actualDataLen = count($data) - 2;
+        $data[0] = $actualDataLen & 0xFF;
+        $data[1] = ($actualDataLen >> 8) & 0xFF;
+        return $data;
     }
 
     /**
