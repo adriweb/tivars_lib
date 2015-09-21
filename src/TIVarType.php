@@ -77,28 +77,40 @@ class TIVarType
     /**
      * @param   int     $id     The type ID
      * @return  TIVarType
+     * @throws  \Exception
      */
     public static function createFromID($id = -1)
     {
-        $instance = new self();
-        $instance->id   = $id;
-        $instance->exts = TIVarTypes::getExtensionsFromTypeID($id);
-        $instance->name = TIVarTypes::getNameFromID($id);
-        $instance->typeHandler = TIVarTypeHandlerFactory::create($id);
-        return $instance;
+        if (TIVarTypes::isValidTypeID($id))
+        {
+            $instance = new self();
+            $instance->id = $id;
+            $instance->exts = TIVarTypes::getExtensionsFromTypeID($id);
+            $instance->name = TIVarTypes::getNameFromID($id);
+            $instance->typeHandler = self::determineTypeHandler($id);
+            return $instance;
+        } else {
+            throw new \Exception("Invalid type ID");
+        }
     }
 
     /**
      * @param   string  $name   The type name
      * @return  TIVarType
+     * @throws  \Exception
      */
     public static function createFromName($name = '')
     {
-        $instance = new self();
-        $instance->name = $name;
-        $instance->id   = TIVarTypes::getIDFromName($name);
-        $instance->exts = TIVarTypes::getExtensionsFromName($name);
-        $instance->typeHandler = TIVarTypeHandlerFactory::create($instance->id);
-        return $instance;
+        if (TIVarTypes::isValidTypeName($name))
+        {
+            $instance = new self();
+            $instance->name = $name;
+            $instance->id   = TIVarTypes::getIDFromName($name);
+            $instance->exts = TIVarTypes::getExtensionsFromName($name);
+            $instance->typeHandler = self::determineTypeHandler($instance->id);
+            return $instance;
+        } else {
+            throw new \Exception("Invalid type name");
+        }
     }
 }
