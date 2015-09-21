@@ -24,12 +24,11 @@ class TH_0x05 implements ITIVarTypeHandler
      * @param   array   $options    Associative array of options such as ['lang' => 'fr']
      * @return  array   The bytes (tokens) array
      */
-    public function makeDataFromString($str = '', array $options = [])
+    public static function makeDataFromString($str = '', array $options = [])
     {
         // TODO: tokenize.
         return [];
     }
-
 
     /**
      * Detokenizer
@@ -39,7 +38,7 @@ class TH_0x05 implements ITIVarTypeHandler
      * @return  string  The program source as a string (detokenized)
      * @throws  \Exception
      */
-    public function makeStringFromData(array $data = [], array $options = [])
+    public static function makeStringFromData(array $data = [], array $options = [])
     {
         if ($data === [])
         {

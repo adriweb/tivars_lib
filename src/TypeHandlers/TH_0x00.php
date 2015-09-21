@@ -13,8 +13,7 @@ include_once "ITIVarTypeHandler.php";
 // Type Handler for type 0x00: Real
 class TH_0x00 implements ITIVarTypeHandler
 {
-
-    public function makeDataFromString($str = '', array $options = [])
+    public static function makeDataFromString($str = '', array $options = [])
     {
         if ($str == '' || !is_numeric($str))
         {
@@ -40,7 +39,7 @@ class TH_0x00 implements ITIVarTypeHandler
         return $data;
     }
 
-    public function makeStringFromData(array $data = [], array $options = [])
+    public static function makeStringFromData(array $data = [], array $options = [])
     {
         if (count($data) !== 9)
         {
