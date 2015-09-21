@@ -13,31 +13,22 @@ use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
-/* Types */
-
-/*
-$expected = 32;
-$actual = TIVarTypes::getIDFromName("ExactRealPi");
-echo "$expected === " . 'TIVarTypes::getTypeIdFromString("ExactRealPi")' . " ?\t" . ($expected === $actual ? 'true' : 'false') . "\n";
-*/
+assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
 
 
-/* File reading */
-
-/*
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram.8xp');
-print_r($testPrgm);
-echo "Readable content\n" . $testPrgm->getReadableContent(['lang' => 'en']) . "\n";
+assert($testPrgm->getReadableContent(['lang' => 'en']) === 'Disp "H[|e]llo Wo[r]l[|d]');
 
 //$newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 //$newPrgm->setContentFromString("asdf");
 //print_r($newPrgm);
-*/
 
-$testReal = TIVarFile::loadFromFile('testData/Real_negative.8xn');
-//print_r($testReal);
-//echo "Check: filesize-57 == header['entries_len'] ?  " . (($testReal->size() - 57 == $testReal->getHeader()['entries_len']) ? 'true' : 'false') . "\n";
-echo "Readable content: " . $testReal->getReadableContent() . "\n";
 
+$testReal = TIVarFile::loadFromFile('testData/Real_neg.8xn'); // -42.1337
+$newReal = TIVarFile::createNew(TIVarType::createFromName("Real"));
+$newReal->setContentFromString('-42.1337');
+assert($testReal->getHeader()['entries_len'] === $testReal->size() - 57);
+assert($testReal->getReadableContent() === '-42.1337');
+assert($testReal->getRawContent() === $newReal->getRawContent());
 
 ?>
