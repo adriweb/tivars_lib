@@ -16,18 +16,22 @@ use tivars\TIVarTypes;
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
 
 
-$testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram.8xp');
-assert($testPrgm->getReadableContent(['lang' => 'en']) === 'Disp "H[|e]llo Wo[r]l[|d]');
+$testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
+assert($testPrgm->getHeader()['entries_len'] === $testPrgm->size() - 57);
+$newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
+$newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'fr']));
+assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 
-//$newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
-//$newPrgm->setContentFromString("asdf");
-//print_r($newPrgm);
+
+$testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
+$newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
+$newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));
+assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 
 
 $testReal = TIVarFile::loadFromFile('testData/Real_neg.8xn'); // -42.1337
 $newReal = TIVarFile::createNew(TIVarType::createFromName("Real"));
 $newReal->setContentFromString('-42.1337');
-assert($testReal->getHeader()['entries_len'] === $testReal->size() - 57);
 assert($testReal->getReadableContent() === '-42.1337');
 assert($testReal->getRawContent() === $newReal->getRawContent());
 
