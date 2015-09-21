@@ -237,7 +237,8 @@ class TIVarFile extends BinaryFile
 
     public function setContentFromString($str = '', $options = [])
     {
-        $this->varEntry['data'] = $this->type->getTypeHandler()->makeDataFromString($str, $options);
+        $handler = $this->type->getTypeHandler();
+        $this->varEntry['data'] = $handler::makeDataFromString($str, $options);
         $this->refreshMetadataFields();
     }
 
@@ -248,7 +249,8 @@ class TIVarFile extends BinaryFile
 
     public function getReadableContent($options = [])
     {
-        return $this->type->getTypeHandler()->makeStringFromData($this->varEntry['data'], $options);
+        $handler = $this->type->getTypeHandler();
+        return $handler::makeStringFromData($this->varEntry['data'], $options);
     }
 
     public function fixChecksumInFile()
