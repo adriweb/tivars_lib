@@ -79,11 +79,14 @@ class TIVarFile extends BinaryFile
     {
         if ($type !== null)
         {
-            $name = preg_replace('/[^A-Z0-9]/', '', $name);
             if ($name === '')
             {
                 $name = 'FILE' . ((count($type->getExts()) > 0) ? $type->getExts()[0] : '');
-                echo "Warning: Name was modified to: " . strtoupper(substr($name, 0, 8));
+            }
+            $newName = preg_replace('/[^a-zA-Z0-9]/', '', $name);
+            if ($newName !== $name || strlen($newName) > 8 || $newName === '' || is_numeric($newName[0]))
+            {
+                throw new \Exception("Invalid name given. 8 chars (A-Z, 0-9) max, starting by a letter");
             }
             $name = strtoupper(substr($name, 0, 8));
 
