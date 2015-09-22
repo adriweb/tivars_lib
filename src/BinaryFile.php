@@ -22,14 +22,19 @@ class BinaryFile
     {
         if ($filePath !== null)
         {
-            $filePath = realpath($filePath);
-            $this->file = fopen($filePath, 'rb+');
-            if ($this->file === false)
+            if (file_exists($filePath))
             {
-                throw new \Exception("Can't open the input file");
+                $filePath = realpath($filePath);
+                $this->file = fopen($filePath, 'rb+');
+                if ($this->file === false)
+                {
+                    throw new \Exception("Can't open the input file");
+                }
+                $this->filePath = $filePath;
+                $this->fileSize = fstat($this->file)['size'];
+            } else {
+                throw new \Exception("No such file");
             }
-            $this->filePath = $filePath;
-            $this->fileSize = fstat($this->file)['size'];
         } else {
             throw new \Exception("No file path given");
         }
