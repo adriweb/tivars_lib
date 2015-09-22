@@ -42,7 +42,14 @@ assert($testReal->getRawContent() === $newReal->getRawContent());
 (!file_exists('testData/Real_neg.8xn.bak')) && copy('testData/Real_neg.8xn', 'testData/Real_neg.8xn.bak');
 $testReal = TIVarFile::loadFromFile('testData/Real_neg.8xn'); // -42.1337
 $testReal->setContentFromString('-9001.123456');
-$testReal->saveVarToFile();
+//$testReal->saveVarToFile();
 */
+
+
+$testExactRealFrac = TIVarFile::loadFromFile('testData/Exact_RealFrac.8xn');
+echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
+$testExactRealFrac->setContentFromString("0.2");
+echo $testExactRealFrac->getReadableContent() . "\n";
+//$testExactRealFrac->saveVarToFile();
 
 ?>
