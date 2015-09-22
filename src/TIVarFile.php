@@ -99,7 +99,7 @@ class TIVarFile extends BinaryFile
                 'entries_len'   =>  0 // will have to be overwritten later
             ];
             $instance->varEntry = [
-                'constBytes'    =>  [ 0x0B, 0x00 ],
+                'constBytes'    =>  [ 0x0D, 0x00 ],
                 'data_length'   =>  0, // will have to be overwritten later
                 'typeID'        =>  $type->getId(),
                 'varname'       =>  str_pad($name, 8, "\0"),
@@ -218,9 +218,8 @@ class TIVarFile extends BinaryFile
      */
     private function refreshMetadataFields()
     {
-        $oldVarEntryLen = $this->varEntry['data_length'];
         $this->varEntry['data_length'] = $this->varEntry['data_length2'] = count($this->varEntry['data']);
-        $this->header['entries_len'] += $this->varEntry['data_length'] - $oldVarEntryLen;
+        $this->header['entries_len'] = $this->varEntry['data_length'] + 17; // 17 == sum of the individual sizes.
         $this->computedChecksum = $this->computeChecksumFromInstanceData();
     }
 
@@ -266,7 +265,7 @@ class TIVarFile extends BinaryFile
             if (!$this->isValid())
             {
                 fseek($this->file, $this->fileSize - 2);
-                fwrite($this->file, chr($this->computedChecksum & 0xFF) . chr($this->computedChecksum >> 8));
+                fwrite($this->file, chr($this->computedChecksum & 0xFF) . chr(($this->computedChecksum >> 8) & 0xFF));
                 $this->inFileChecksum = $this->getChecksumValueFromFile();
             }
         } else {
