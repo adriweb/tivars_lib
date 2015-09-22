@@ -192,7 +192,13 @@ class TIVarFile extends BinaryFile
 
     private function computeChecksumFromInstanceData()
     {
-        return array_sum($this->varEntry['data']) & 0xFFFF;
+        $sum = 0;
+        $sum += array_sum($this->varEntry['constBytes']);
+        $sum += 2 * (($this->varEntry['data_length'] & 0xFF) + (($this->varEntry['data_length'] >> 8) & 0xFF));
+        $sum += $this->varEntry['typeID'] + $this->varEntry['archivedFlag'];
+        $sum += array_sum(array_map('ord', str_split($this->varEntry['varname'])));
+        $sum += array_sum($this->varEntry['data']);
+        return $sum & 0xFFFF;
     }
 
     private function getChecksumValueFromFile()
