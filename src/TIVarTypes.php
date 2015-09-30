@@ -29,6 +29,7 @@ abstract class TIVarTypes
         }
     }
 
+    // TODO : make the extensions arrays' content for each compatibility level (see TIVersions)
     public static function initTIVarTypesArray()
     {
         self::insertType('Unknown',               -1,   [     ]);

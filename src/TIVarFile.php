@@ -30,7 +30,10 @@ class TIVarFile extends BinaryFile
         'data_length2'  => null,
         'data'          => null
     ];
+    /** @var TIVarType */
     private $type = null;
+    /** @var TIVersion */
+    private $version = null;
     private $computedChecksum = null;
     private $inFileChecksum = null;
     private $isFromFile = null;
@@ -75,7 +78,7 @@ class TIVarFile extends BinaryFile
         }
     }
 
-    public static function createNew(TIVarType $type = null, $name = '')
+    public static function createNew(TIVarType $type = null, $name = '', TIVersion $version = null)
     {
         if ($type !== null)
         {
@@ -92,8 +95,9 @@ class TIVarFile extends BinaryFile
 
             $instance = new self();
             $instance->type = $type;
+            $instance->version = ($instance->version !== null) ? $version : TIVersion::createFromName('84+'); // default
             $instance->header = [
-                'signature'     =>  "**TI83F*",
+                'signature'     =>  $instance->version->getSig(),
                 'sig_extra'     =>  [ 0x1A, 0x0A, 0x00 ],
                 'comment'       =>  str_pad("Created by tivars_lib on " . date("M j, Y"), 42, "\0"),
                 'entries_len'   =>  0 // will have to be overwritten later
@@ -125,10 +129,12 @@ class TIVarFile extends BinaryFile
         $this->header['sig_extra']   = $this->get_raw_bytes(3);
         $this->header['comment']     = $this->get_string_bytes(42);
         $this->header['entries_len'] = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
+        $this->version = TIVersion::createFromSignature($this->header['signature']);
     }
 
     private function makeVarEntryFromFile()
     {
+        $fileLevel = $this->version->getLevel();
         $dataSectionOffset = (8+3+42+2); // after header
         fseek($this->file, $dataSectionOffset);
         $this->varEntry = [];
@@ -136,8 +142,8 @@ class TIVarFile extends BinaryFile
         $this->varEntry['data_length']  = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['typeID']       = $this->get_raw_bytes(1)[0];
         $this->varEntry['varname']      = $this->get_string_bytes(8);
-        $this->varEntry['version']      = $this->get_raw_bytes(1)[0];
-        $this->varEntry['archivedFlag'] = $this->get_raw_bytes(1)[0];
+        $this->varEntry['version']      = ($fileLevel >= TIVersions::hasVersionField) ? $this->get_raw_bytes(1)[0] : null;
+        $this->varEntry['archivedFlag'] = ($fileLevel >= TIVersions::hasFlash)        ? $this->get_raw_bytes(1)[0] : null;
         $this->varEntry['data_length2'] = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['data']         = $this->get_raw_bytes($this->varEntry['data_length']);
     }
