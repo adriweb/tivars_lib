@@ -132,12 +132,12 @@ abstract class TIVarTypes
         }
     }
 
-    public static function isValidTypeID($id = -1)
+    public static function isValidID($id = -1)
     {
         return ($id >= 0 && is_int($id) && isset(self::$types[$id]));
     }
 
-    public static function isValidTypeName($name = '')
+    public static function isValidName($name = '')
     {
         return ($name !== '' && isset(self::$types[$name]));
     }
