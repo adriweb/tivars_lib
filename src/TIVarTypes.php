@@ -135,7 +135,7 @@ abstract class TIVarTypes
 
     public static function isValidID($id = -1)
     {
-        return ($id >= 0 && is_int($id) && isset(self::$types[$id]));
+        return ($id != -1 && is_int($id) && isset(self::$types[$id]));
     }
 
     public static function isValidName($name = '')

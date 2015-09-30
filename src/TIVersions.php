@@ -137,7 +137,7 @@ abstract class TIVersions
 
     public static function isValidLevel($level = 99)
     {
-        return ($level >= 0 && is_int($level) && isset(self::$versions[$level]));
+        return ($level != 99 && is_int($level) && isset(self::$versions[$level]));
     }
 
     public static function isValidName($name = '')
