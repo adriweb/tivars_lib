@@ -13,13 +13,16 @@ use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
+/*
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
 
 
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
 assert($testPrgm->getHeader()['entries_len'] === $testPrgm->size() - 57);
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
-$newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'fr']));
+$testPrgmcontent = $testPrgm->getReadableContent(['lang' => 'fr']);
+//echo "testPrgmContent :\n$testPrgmcontent\n";
+$newPrgm->setContentFromString($testPrgmcontent);
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 //$newPrgm->saveVarToFile();
 
@@ -30,7 +33,7 @@ $newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 
 
-$testReal = TIVarFile::loadFromFile('testData/Real_neg.8xn'); // -42.1337
+$testReal = TIVarFile::loadFromFile('testData/Real.8xn'); // -42.1337
 $newReal = TIVarFile::createNew(TIVarType::createFromName("Real"), "A");
 $newReal->setContentFromString('-42.1337');
 assert($testReal->getReadableContent() === '-42.1337');
@@ -38,18 +41,27 @@ assert($testReal->getRawContent() === $newReal->getRawContent());
 //$newReal->saveVarToFile("/Users/adriweb/", "trololol");
 
 
-/*
 (!file_exists('testData/Real_neg.8xn.bak')) && copy('testData/Real_neg.8xn', 'testData/Real_neg.8xn.bak');
 $testReal = TIVarFile::loadFromFile('testData/Real_neg.8xn'); // -42.1337
 $testReal->setContentFromString('-9001.123456');
 //$testReal->saveVarToFile();
-*/
 
 
 $testExactRealFrac = TIVarFile::loadFromFile('testData/Exact_RealFrac.8xn');
-echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
+//echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
 $testExactRealFrac->setContentFromString("0.2");
-echo $testExactRealFrac->getReadableContent() . "\n";
+//echo $testExactRealFrac->getReadableContent() . "\n";
 //$testExactRealFrac->saveVarToFile();
+*/
+
+
+/*
+$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
+print_r($testMatrixStandard);
+//echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
+//$testExactRealFrac->setContentFromString("0.2");
+//echo $testExactRealFrac->getReadableContent() . "\n";
+//$testExactRealFrac->saveVarToFile();
+*/
 
 ?>
