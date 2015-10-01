@@ -201,7 +201,7 @@ class TIVarFile extends BinaryFile
         $sum = 0;
         $sum += array_sum($this->varEntry['constBytes']);
         $sum += 2 * (($this->varEntry['data_length'] & 0xFF) + (($this->varEntry['data_length'] >> 8) & 0xFF));
-        $sum += $this->varEntry['typeID'] + $this->varEntry['version'] + $this->varEntry['archivedFlag'];
+        $sum += $this->varEntry['typeID'] + (int)$this->varEntry['version'] + (int)$this->varEntry['archivedFlag'];
         $sum += array_sum(array_map('ord', str_split($this->varEntry['varname'])));
         $sum += array_sum($this->varEntry['data']);
         return $sum & 0xFFFF;
@@ -316,6 +316,11 @@ class TIVarFile extends BinaryFile
         {
             foreach ($whichData as $key => $data)
             {
+                // fields not used for this calc version, for instance.
+                if ($data === null)
+                {
+                    continue;
+                }
                 switch (gettype($data))
                 {
                     case 'integer':
