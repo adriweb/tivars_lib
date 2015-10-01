@@ -32,7 +32,7 @@ class TIVarFile extends BinaryFile
     ];
     /** @var TIVarType */
     private $type = null;
-    /** @var TIVersion */
+    /** @var TIModel */
     private $version = null;
     private $computedChecksum = null;
     private $inFileChecksum = null;
@@ -78,7 +78,7 @@ class TIVarFile extends BinaryFile
         }
     }
 
-    public static function createNew(TIVarType $type = null, $name = '', TIVersion $version = null)
+    public static function createNew(TIVarType $type = null, $name = '', TIModel $version = null)
     {
         if ($type !== null)
         {
@@ -95,20 +95,21 @@ class TIVarFile extends BinaryFile
 
             $instance = new self();
             $instance->type = $type;
-            $instance->version = ($instance->version !== null) ? $version : TIVersion::createFromName('84+'); // default
+            $instance->version = ($instance->version !== null) ? $version : TIModel::createFromName('84+'); // default
             $instance->header = [
                 'signature'     =>  $instance->version->getSig(),
                 'sig_extra'     =>  [ 0x1A, 0x0A, 0x00 ],
                 'comment'       =>  str_pad("Created by tivars_lib on " . date("M j, Y"), 42, "\0"),
                 'entries_len'   =>  0 // will have to be overwritten later
             ];
+            $calcFlags = $instance->version->getFlags();
             $instance->varEntry = [
                 'constBytes'    =>  [ 0x0D, 0x00 ],
                 'data_length'   =>  0, // will have to be overwritten later
                 'typeID'        =>  $type->getId(),
                 'varname'       =>  str_pad($name, 8, "\0"),
-                'version'       =>  0,
-                'archivedFlag'  =>  0, // TODO: check when that needs to be 1.
+                'version'       =>  ($calcFlags >= TIFeatureFlags::hasFlash) ? 0 : null,
+                'archivedFlag'  =>  ($calcFlags >= TIFeatureFlags::hasFlash) ? 0 : null, // TODO: check when that needs to be 1.
                 'data_length2'  =>  0, // will have to be overwritten later
                 'data'          =>  [] // will have to be overwritten later
             ];
@@ -129,12 +130,12 @@ class TIVarFile extends BinaryFile
         $this->header['sig_extra']   = $this->get_raw_bytes(3);
         $this->header['comment']     = $this->get_string_bytes(42);
         $this->header['entries_len'] = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
-        $this->version = TIVersion::createFromSignature($this->header['signature']);
+        $this->version = TIModel::createFromSignature($this->header['signature']);
     }
 
     private function makeVarEntryFromFile()
     {
-        $fileLevel = $this->version->getLevel();
+        $calcFlags = $this->version->getFlags();
         $dataSectionOffset = (8+3+42+2); // after header
         fseek($this->file, $dataSectionOffset);
         $this->varEntry = [];
@@ -142,8 +143,8 @@ class TIVarFile extends BinaryFile
         $this->varEntry['data_length']  = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['typeID']       = $this->get_raw_bytes(1)[0];
         $this->varEntry['varname']      = $this->get_string_bytes(8);
-        $this->varEntry['version']      = ($fileLevel >= TIVersions::hasVersionField) ? $this->get_raw_bytes(1)[0] : null;
-        $this->varEntry['archivedFlag'] = ($fileLevel >= TIVersions::hasFlash)        ? $this->get_raw_bytes(1)[0] : null;
+        $this->varEntry['version']      = ($calcFlags >= TIFeatureFlags::hasFlash) ? $this->get_raw_bytes(1)[0] : null;
+        $this->varEntry['archivedFlag'] = ($calcFlags >= TIFeatureFlags::hasFlash) ? $this->get_raw_bytes(1)[0] : null;
         $this->varEntry['data_length2'] = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['data']         = $this->get_raw_bytes($this->varEntry['data_length']);
     }

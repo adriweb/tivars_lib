@@ -8,10 +8,10 @@
 
 namespace tivars;
 
-class TIVersion
+class TIModel
 {
     private $name  = 'Unknown';
-    private $level = 99;
+    private $flags = 0;
     private $sig   = '';
 
     /**
@@ -25,9 +25,9 @@ class TIVersion
     /**
      * @return int
      */
-    public function getLevel()
+    public function getFlags()
     {
-        return $this->level;
+        return $this->flags;
     }
 
     /**
@@ -42,18 +42,18 @@ class TIVersion
     /*** "Constructors" ***/
 
     /**
-     * @param   int     $level  The version compatibliity level
-     * @return  TIVersion
+     * @param   int     $flags  The version compatibliity flags
+     * @return  TIModel
      * @throws  \Exception
      */
-    public static function createFromLevel($level = -1)
+    public static function createFromFlags($flags = -1)
     {
-        if (TIVersions::isValidLevel($level))
+        if (TIModels::isValidFlags($flags))
         {
             $instance = new self();
-            $instance->level = $level;
-            $instance->sig = TIVersions::getSignatureFromLevel($level);
-            $instance->name = TIVersions::getNameFromLevel($level);
+            $instance->flags = $flags;
+            $instance->sig = TIModels::getSignatureFromFlags($flags);
+            $instance->name = TIModels::getDefaultNameFromFlags($flags);
             return $instance;
         } else {
             throw new \Exception("Invalid version ID");
@@ -62,17 +62,17 @@ class TIVersion
 
     /**
      * @param   string  $name   The version name
-     * @return  TIVersion
+     * @return  TIModel
      * @throws  \Exception
      */
     public static function createFromName($name = '')
     {
-        if (TIVersions::isValidName($name))
+        if (TIModels::isValidName($name))
         {
             $instance = new self();
             $instance->name = $name;
-            $instance->level = TIVersions::getLevelFromName($name);
-            $instance->sig = TIVersions::getSignatureFromName($name);
+            $instance->flags = TIModels::getFlagsFromName($name);
+            $instance->sig = TIModels::getSignatureFromName($name);
             return $instance;
         } else {
             throw new \Exception("Invalid version name");
@@ -81,17 +81,17 @@ class TIVersion
 
     /**
      * @param   string  $sig    The signature (magic bytes)
-     * @return  TIVersion
+     * @return  TIModel
      * @throws  \Exception
      */
     public static function createFromSignature($sig = '')
     {
-        if (TIVersions::isValidSignature($sig))
+        if (TIModels::isValidSignature($sig))
         {
             $instance = new self();
             $instance->sig = $sig;
-            $instance->level = TIVersions::getMinLevelFromSignature($sig);
-            $instance->name = TIVersions::getDefaultNameFromSignature($sig);
+            $instance->flags = TIModels::getMinFlagsFromSignature($sig);
+            $instance->name = TIModels::getDefaultNameFromSignature($sig);
             return $instance;
         } else {
             throw new \Exception("Invalid version signature");

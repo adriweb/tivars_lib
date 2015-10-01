@@ -50,8 +50,8 @@ $testExactRealFrac->setContentFromString("0.2");
 
 
 
-$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
-print_r($testMatrixStandard);
+//$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
+//print_r($testMatrixStandard);
 //echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
 //$testExactRealFrac->setContentFromString("0.2");
 //echo $testExactRealFrac->getReadableContent() . "\n";
