@@ -17,8 +17,8 @@ abstract class TIVarTypes
      *
      * @param string    $name   The name of the type
      * @param int       $id     The ID of the type
-     * @param array     $exts   The extensions the type can have (ordered by compatibility level:
-     *                          82, 83, 82A, 83+/82+, 84+, 84+CSE, 84+CE, 83PCE (see TIVersions)
+     * @param array     $exts   The extensions the type can have (ordered by default priority then compat. level:
+     *                          82, 83, 84+, 82A, 83+/82+, 84+CSE, 84+CE, 83PCE (see TIVersions)
      */
     private static function insertType($name, $id, array $exts)
     {
@@ -26,7 +26,7 @@ abstract class TIVarTypes
         self::$types[$id]      = [ 'name' => $name, 'exts' => $exts ];
         foreach ($exts as $ext)
         {
-            if ($ext !== null)
+            if ($ext !== null && !isset(self::$types[$ext]))
             {
                 self::$types[$ext] = ['id' => $id, 'name' => $name];
             }
@@ -57,7 +57,7 @@ abstract class TIVarTypes
         self::insertType('AppVar',               0x15,  [ null,  null,  null, '8xv', '8xv', '8xv', '8xv', '8xv']);
         self::insertType('TemporaryItem',        0x16,  [ null,  null,  null,  null,  null,  null,  null,  null]);
         self::insertType('GroupObject',          0x17,  ['82g', '83g', '8xg', '8xg', '8xg', '8xg', '8cg', '8cg']);
-        self::insertType('RealFration',          0x18,  [ null,  null,  null,  null, '8xn', '8xn', '8xn', '8xn']);
+        self::insertType('RealFration',          0x18,  [ null,  null, '8xn',  null, '8xn', '8xn', '8xn', '8xn']);
         self::insertType('Image',                0x1A,  [ null,  null,  null,  null,  null,  null, '8ca', '8ca']);
 
         /* Exact values (TI-83 Premium CE) */
@@ -71,9 +71,9 @@ abstract class TIVarTypes
         self::insertType('ExactRealPiFrac',      0x21,  [ null,  null,  null,  null,  null,  null,  null, '8xn']);
 
         /* System/Flash-related things */
-        self::insertType('OperatingSystem',      0x23,  ['82u', '83u', '82u', '8xu', '8xu', '8cu', '8eu', '8pu']);
-        self::insertType('FlashApp',             0x24,  [ null,  null,  null, '8xk', '8xk', '8ck', '8ek', '8ek']);
-        self::insertType('Certificate',          0x25,  [ null,  null,  null, '8xq', '8xq', '8cq',  null,  null]);
+        self::insertType('OperatingSystem',      0x23,  ['82u', '83u', '8xu', '82u', '8xu', '8cu', '8eu', '8pu']);
+        self::insertType('FlashApp',             0x24,  [ null,  null, '8xk',  null, '8xk', '8ck', '8ek', '8ek']);
+        self::insertType('Certificate',          0x25,  [ null,  null, '8xq',  null, '8xq', '8cq',  null,  null]);
         self::insertType('CertificateMemory',    0x27,  [ null,  null,  null,  null,  null,  null,  null,  null]);
         self::insertType('Clock',                0x29,  [ null,  null,  null,  null,  null,  null,  null,  null]);
         self::insertType('FlashLicense',         0x3E,  [ null,  null,  null,  null,  null,  null,  null,  null]);
