@@ -80,7 +80,7 @@ class TIVersion
     }
 
     /**
-     * @param   int     $level  The version compatibliity level
+     * @param   string  $sig    The signature (magic bytes)
      * @return  TIVersion
      * @throws  \Exception
      */

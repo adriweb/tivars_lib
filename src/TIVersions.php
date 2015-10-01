@@ -42,13 +42,13 @@ abstract class TIVersions
 
         self::insertVersion(0,  '82',      '**TI82**');
         self::insertVersion(1,  '83',      '**TI83**');
-        self::insertVersion(2,  '83+',     '**TI83F*');
-        self::insertVersion(2,  '82+',     '**TI83F*');
-        self::insertVersion(3,  '84+',     '**TI83F*');
-        self::insertVersion(3,  '82A',     '**TI83F*');
-        self::insertVersion(4,  '84+CSE',  '**TI83F*');
-        self::insertVersion(5,  '84+CE',   '**TI83F*');
-        self::insertVersion(6,  '83PCE',   '**TI83F*');
+        self::insertVersion(4,  '84+',     '**TI83F*'); // default for this sig
+        self::insertVersion(2,  '82A',     '**TI83F*');
+        self::insertVersion(3,  '83+',     '**TI83F*');
+        self::insertVersion(3,  '82+',     '**TI83F*');
+        self::insertVersion(5,  '84+CSE',  '**TI83F*');
+        self::insertVersion(6,  '84+CE',   '**TI83F*');
+        self::insertVersion(7,  '83PCE',   '**TI83F*');
     }
 
     /**
