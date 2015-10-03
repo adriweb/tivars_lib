@@ -10,9 +10,10 @@ namespace tivars;
 
 class TIModel
 {
-    private $name  = 'Unknown';
-    private $flags = 0;
-    private $sig   = '';
+    private $orderID = -1;
+    private $name    = 'Unknown';
+    private $flags   = 0;
+    private $sig     = '';
 
     /**
      * @return string
@@ -39,6 +40,12 @@ class TIModel
     }
 
 
+    public function supportsType(TIVarType $type)
+    {
+        $exts = $type->getExts();
+        return isset($exts[$this->orderID]) && $exts[$this->orderID] !== null;
+    }
+
     /*** "Constructors" ***/
 
     /**
@@ -52,6 +59,7 @@ class TIModel
         {
             $instance = new self();
             $instance->flags = $flags;
+            $instance->orderID = TIModels::getDefaultOrderIDFromFlags($flags);
             $instance->sig = TIModels::getSignatureFromFlags($flags);
             $instance->name = TIModels::getDefaultNameFromFlags($flags);
             return $instance;
@@ -71,6 +79,7 @@ class TIModel
         {
             $instance = new self();
             $instance->name = $name;
+            $instance->orderID = TIModels::getOrderIDFromName($name);
             $instance->flags = TIModels::getFlagsFromName($name);
             $instance->sig = TIModels::getSignatureFromName($name);
             return $instance;
@@ -90,6 +99,7 @@ class TIModel
         {
             $instance = new self();
             $instance->sig = $sig;
+            $instance->orderID = TIModels::getDefaultOrderIDFromSignature($sig);
             $instance->flags = TIModels::getMinFlagsFromSignature($sig);
             $instance->name = TIModels::getDefaultNameFromSignature($sig);
             return $instance;

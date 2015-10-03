@@ -8,13 +8,24 @@
 
 include_once "src/autoloader.php";
 
+use tivars\TIModel;
 use tivars\TIVarFile;
 use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
 /*
+$badTypeForCalc = TIVarFile::createNew(TIVarType::createFromName('ExactComplexFrac'), 'Bla', TIModel::createFromName('83PCE'));
+try
+{
+    $goodTypeForCalc = TIVarFile::createNew(TIVarType::createFromName('ExactComplexFrac'), 'Bla', TIModel::createFromName('84+'));
+    assert(false);
+} catch (Exception $e) {}
+
+
+
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
+
 
 
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
@@ -27,10 +38,12 @@ assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 //$newPrgm->saveVarToFile();
 
 
+
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
+
 
 
 $testReal = TIVarFile::loadFromFile('testData/Real.8xn'); // -42.1337

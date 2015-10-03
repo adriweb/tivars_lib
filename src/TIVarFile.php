@@ -33,7 +33,7 @@ class TIVarFile extends BinaryFile
     /** @var TIVarType */
     private $type = null;
     /** @var TIModel */
-    private $version = null;
+    private $calcModel = null;
     private $computedChecksum = null;
     private $inFileChecksum = null;
     private $isFromFile = null;
@@ -95,14 +95,20 @@ class TIVarFile extends BinaryFile
 
             $instance = new self();
             $instance->type = $type;
-            $instance->version = ($instance->version !== null) ? $version : TIModel::createFromName('84+'); // default
+            $instance->calcModel = ($version !== null) ? $version : TIModel::createFromName('84+'); // default
+
+            if (!$instance->calcModel->supportsType($instance->type))
+            {
+                throw new \Exception('This calculator model (' . $instance->calcModel->getName() . ') does not support the type ' . $instance->type->getName());
+            }
+
             $instance->header = [
-                'signature'     =>  $instance->version->getSig(),
+                'signature'     =>  $instance->calcModel->getSig(),
                 'sig_extra'     =>  [ 0x1A, 0x0A, 0x00 ],
                 'comment'       =>  str_pad("Created by tivars_lib on " . date("M j, Y"), 42, "\0"),
                 'entries_len'   =>  0 // will have to be overwritten later
             ];
-            $calcFlags = $instance->version->getFlags();
+            $calcFlags = $instance->calcModel->getFlags();
             $instance->varEntry = [
                 'constBytes'    =>  [ 0x0D, 0x00 ],
                 'data_length'   =>  0, // will have to be overwritten later
@@ -130,12 +136,12 @@ class TIVarFile extends BinaryFile
         $this->header['sig_extra']   = $this->get_raw_bytes(3);
         $this->header['comment']     = $this->get_string_bytes(42);
         $this->header['entries_len'] = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
-        $this->version = TIModel::createFromSignature($this->header['signature']);
+        $this->calcModel = TIModel::createFromSignature($this->header['signature']);
     }
 
     private function makeVarEntryFromFile()
     {
-        $calcFlags = $this->version->getFlags();
+        $calcFlags = $this->calcModel->getFlags();
         $dataSectionOffset = (8+3+42+2); // after header
         fseek($this->file, $dataSectionOffset);
         $this->varEntry = [];

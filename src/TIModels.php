@@ -27,20 +27,21 @@ abstract class TIModels
     /**
      *  Make and insert the associative arrays for the model.
      *
+     * @param int|null  $orderID The orderID (for the extensions association)
      * @param int       $flags   The flags determining available features
      * @param string    $name    The name of the calc using this model
      * @param string    $sig     The signature (magic bytes) used for this model
      */
-    private static function insertModel($flags, $name, $sig)
+    private static function insertModel($orderID, $flags, $name, $sig)
     {
         if (!isset(self::$models[$name]))
-            self::$models[$name]  = [ 'flags'  => $flags, 'sig'  => $sig ];
+            self::$models[$name]  = ['orderID' => $orderID, 'flags' => $flags, 'sig' => $sig];
 
         if (!isset(self::$models[$flags]))
-            self::$models[$flags] = [ 'name'   => $name,  'sig'  => $sig ];
+            self::$models[$flags] = ['orderID' => $orderID, 'name' => $name, 'sig' => $sig];
 
         if (!isset(self::$models[$sig]))
-            self::$models[$sig]   = [ 'flags'  => $flags, 'name' => $name ];
+            self::$models[$sig]   = ['orderID' => $orderID, 'flags' => $flags, 'name' => $name];
     }
 
     // TODO : Research actual compatibility flags/"versions" from libtifiles, and maybe even TI ?
@@ -55,16 +56,16 @@ abstract class TIModels
         $flags84pce  = $flags84pcse | TIFeatureFlags::hasEZ80CPU;
         $flags83pce  = $flags84pce  | TIFeatureFlags::hasExactMath;
 
-        self::insertModel(0,            'Unknown', '');
-        self::insertModel($flags82,     '82',      '**TI82**');
-        self::insertModel($flags83,     '83',      '**TI83**');
-        self::insertModel($flags82a,    '82A',     '**TI83F*');
-        self::insertModel($flags83p,    '82+',     '**TI83F*');
-        self::insertModel($flags83p,    '83+',     '**TI83F*');
-        self::insertModel($flags84p,    '84+',     '**TI83F*');
-        self::insertModel($flags84pcse, '84+CSE',  '**TI83F*');
-        self::insertModel($flags84pce,  '84+CE',   '**TI83F*');
-        self::insertModel($flags83pce,  '83PCE',   '**TI83F*');
+        self::insertModel(-1,   0,            'Unknown', '');
+        self::insertModel(0,    $flags82,     '82',      '**TI82**');
+        self::insertModel(1,    $flags83,     '83',      '**TI83**');
+        self::insertModel(2,    $flags82a,    '82A',     '**TI83F*');
+        self::insertModel(3,    $flags83p,    '82+',     '**TI83F*');
+        self::insertModel(3,    $flags83p,    '83+',     '**TI83F*');
+        self::insertModel(3,    $flags84p,    '84+',     '**TI83F*');
+        self::insertModel(4,    $flags84pcse, '84+CSE',  '**TI83F*');
+        self::insertModel(5,    $flags84pce,  '84+CE',   '**TI83F*');
+        self::insertModel(6,    $flags83pce,  '83PCE',   '**TI83F*');
     }
 
     /**
@@ -110,6 +111,33 @@ abstract class TIModels
     public static function getDefaultNameFromSignature($sig = '')
     {
         return self::isValidSignature($sig) ? self::$models[$sig]['name'] : '';
+    }
+
+    /**
+     * @param   string  $sig    The signature
+     * @return  int             The default calc order ID whose file formats use that signature
+     */
+    public static function getDefaultOrderIDFromSignature($sig = '')
+    {
+        return self::isValidSignature($sig) ? self::$models[$sig]['orderID'] : -1;
+    }
+
+    /**
+     * @param   string  $name
+     * @return  int             The default calc order ID whose file formats use that signature
+     */
+    public static function getOrderIDFromName($name = '')
+    {
+        return self::isValidName($name) ? self::$models[$name]['orderID'] : -1;
+    }
+
+    /**
+     * @param   int     $flags  The model flags
+     * @return  int             The default calc order ID whose file formats use that signature
+     */
+    public static function getDefaulOrderIDFromFlags($flags = 0)
+    {
+        return self::isValidFlags($flags) ? self::$models[$flags]['orderID'] : -1;
     }
 
     /**
