@@ -141,7 +141,7 @@ class TH_0x05 implements ITIVarTypeHandler
             }
             fclose($handle);
         } else {
-            throw new \Exception("Could not open the tokens csv file")
+            throw new \Exception("Could not open the tokens csv file");
         }
     }
 }
