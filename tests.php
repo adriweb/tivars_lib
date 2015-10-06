@@ -39,6 +39,12 @@ assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 
 
 
+$testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
+$testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
+echo "All prettified and reindented:\n" . $testPrgmcontent . "\n";
+
+
+
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));
