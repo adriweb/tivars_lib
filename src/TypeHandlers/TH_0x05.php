@@ -159,7 +159,7 @@ class TH_0x05 implements ITIVarTypeHandler
         $str = '';
         foreach($lines as $line)
         {
-            $str .= str_repeat(' ', $line[0]*4) . $line[1] . "\n";
+            $str .= str_repeat(' ', $line[0]*4) . $line[1] . "\n";
         }
 
         return $str;
