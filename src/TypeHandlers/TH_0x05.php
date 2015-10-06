@@ -119,7 +119,7 @@ class TH_0x05 implements ITIVarTypeHandler
 
     public static function reindentCodeString($str = '')
     {
-        $str = preg_replace_callback('/"[^$→"]+[→"$]|(\:)/mi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
+        $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)/mi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
         $str = preg_replace('/([^\s])(Del|Eff)Var /mi', "$1\n$2Var ", $str);
         $lines = explode("\n", $str);
         foreach($lines as $key => $line)
