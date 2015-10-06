@@ -106,7 +106,7 @@ class TH_0x05 implements ITIVarTypeHandler
 
         if (isset($options['prettify']) && $options['prettify'] === true)
         {
-            $str = preg_replace('/\[?\|?([a-z]+)\]?/g', '\1', $str);
+            $str = preg_replace('/\[?\|?([a-z]+)\]?/', '\1', $str);
         }
 
         return $str;
