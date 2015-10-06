@@ -146,7 +146,7 @@ class TH_0x05 implements ITIVarTypeHandler
             {
                 $nextIndent++;
             }
-            if ($lines[$key][0] > 0 && ($firstCommand === 'Then' || $firstCommand === 'End'))
+            if ($lines[$key][0] > 0 && ($firstCommand === 'Then' || $firstCommand === 'Else' || $firstCommand === 'End'))
             {
                 $lines[$key][0]--;
             }
