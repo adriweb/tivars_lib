@@ -111,53 +111,59 @@ class TH_0x05 implements ITIVarTypeHandler
 
         if (isset($options['reindent']) && $options['reindent'] === true)
         {
-            $str = preg_replace_callback('/"[^$→"]+[→"$]|(\:)/mi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
-            $lines = explode("\n", $str);
-            foreach($lines as $key => $line)
-            {
-                $lines[$key] = [ 0, $line ]; // indent, text
-            }
-
-            $increaseIndentAfter = ['If', 'For', 'While', 'Repeat'];
-            $nextIndent = 0;
-            $oldFirstCommand = $firstCommand = '';
-            foreach($lines as $key => $lineData)
-            {
-                $oldFirstCommand = $firstCommand;
-
-                $trimmedLine = trim($lineData[1]);
-                $firstCommand = trim(strtok($trimmedLine, ' '));
-                if ($firstCommand === $trimmedLine)
-                {
-                    $firstCommand = trim(strtok($trimmedLine, '('));
-                }
-
-                $lines[$key][0] = $nextIndent;
-
-                if (in_array($firstCommand, $increaseIndentAfter))
-                {
-                    $nextIndent++;
-                }
-                if ($lines[$key][0] > 0 && ($firstCommand === 'Then' || $firstCommand === 'End'))
-                {
-                    $lines[$key][0]--;
-                }
-                if ($nextIndent > 0 && ($firstCommand === 'End' || ($oldFirstCommand === 'If' && $firstCommand !== 'Then')))
-                {
-                    $nextIndent--;
-                }
-            }
-
-            $str = '';
-            foreach($lines as $line)
-            {
-                $str .= str_repeat(' ', $line[0]*4) . $line[1] . "\n";
-            }
+            $str = self::reindentCodeString($str);
         }
 
         return $str;
     }
 
+    public static function reindentCodeString($str = '')
+    {
+        $str = preg_replace_callback('/"[^$→"]+[→"$]|(\:)/mi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
+        $lines = explode("\n", $str);
+        foreach($lines as $key => $line)
+        {
+            $lines[$key] = [ 0, $line ]; // indent, text
+        }
+
+        $increaseIndentAfter = ['If', 'For', 'While', 'Repeat'];
+        $nextIndent = 0;
+        $oldFirstCommand = $firstCommand = '';
+        foreach($lines as $key => $lineData)
+        {
+            $oldFirstCommand = $firstCommand;
+
+            $trimmedLine = trim($lineData[1]);
+            $firstCommand = trim(strtok($trimmedLine, ' '));
+            if ($firstCommand === $trimmedLine)
+            {
+                $firstCommand = trim(strtok($trimmedLine, '('));
+            }
+
+            $lines[$key][0] = $nextIndent;
+
+            if (in_array($firstCommand, $increaseIndentAfter))
+            {
+                $nextIndent++;
+            }
+            if ($lines[$key][0] > 0 && ($firstCommand === 'Then' || $firstCommand === 'End'))
+            {
+                $lines[$key][0]--;
+            }
+            if ($nextIndent > 0 && ($firstCommand === 'End' || ($oldFirstCommand === 'If' && $firstCommand !== 'Then')))
+            {
+                $nextIndent--;
+            }
+        }
+
+        $str = '';
+        foreach($lines as $line)
+        {
+            $str .= str_repeat(' ', $line[0]*4) . $line[1] . "\n";
+        }
+
+        return $str;
+    }
 
     public static function initTokens()
     {
