@@ -271,6 +271,7 @@ class TIVarFile extends BinaryFile
         if ($model !== null)
         {
             $this->calcModel = $model;
+            $this->header['signature'] = $model->getSig();
         } else {
             throw new \Exception("No model given");
         }

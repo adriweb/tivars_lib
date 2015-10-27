@@ -14,6 +14,13 @@ use tivars\TIVarFile;
 use tivars\TIVarType;
 use tivars\TIVarTypes;
 
+$testPrgm42 = TIVarFile::createNew(TIVarType::createFromName("Program"), "asdf");
+$testPrgm42->setCalcModel(TIModel::createFromName("82"));
+$testPrgm42->setContentFromString("");
+$testPrgm42->setVarName("Toto");
+$testPrgm42->saveVarToFile("/Users/adriweb/Downloads", "blablaTOTO");
+
+
 /*
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString("Asm(prgmABCD");
@@ -60,9 +67,7 @@ $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
 $testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
 echo "All prettified and reindented:\n" . $testPrgmcontent . "\n";
 
-$testPrgm = TIVarFile::loadFromFile('/Users/adriweb/Downloads/DynaTrig/83PremiumCE - 84PlusCE/DYNATRIG.8Xp');
-$testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
-echo "All prettified and reindented:\n" . $testPrgmcontent . "\n";
+
 
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
