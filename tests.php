@@ -14,11 +14,6 @@ use tivars\TIVarFile;
 use tivars\TIVarType;
 use tivars\TIVarTypes;
 
-$testPrgm42 = TIVarFile::createNew(TIVarType::createFromName("Program"), "asdf");
-$testPrgm42->setCalcModel(TIModel::createFromName("82"));
-$testPrgm42->setContentFromString("");
-$testPrgm42->setVarName("Toto");
-$testPrgm42->saveVarToFile("/Users/adriweb/Downloads", "blablaTOTO");
 
 
 /*
@@ -31,10 +26,27 @@ $newPrgm->setContentFromString("45.2");
 print_r($newPrgm->getRawContent());
 */
 
-$testData = tivars\TypeHandlers\TH_0x05::makeDataFromString("Asm(prgmABCD");
+$testString = TIVarFile::loadFromFile("testData/String.8xs");
+assert($testString->getReadableContent() == "Hello World");
+
+
+$testEquation = TIVarFile::loadFromFile("testData/Equation_Y1T.8xy");
+assert($testEquation->getReadableContent() == "3sin(T)+4");
+
+
+$testReal = TIVarFile::loadFromFile("testData/Real.8xn");
+echo "testReal.getReadableContent() : " . $testReal->getReadableContent() . "\n";
+assert($testReal->getReadableContent() == "-42.1337");
+
+
+
+$testData = tivars\TypeHandlers\TH_0x05::makeDataFromString("\"<\":Asm(prgmABCD");
 $goodTypeForCalc = TIVarFile::createNew(TIVarType::createFromName("Program"), "Bla", TIModel::createFromName("83PCE"));
 $goodTypeForCalc->setContentFromData($testData);
-
+$test = $goodTypeForCalc->getReadableContent();
+$goodTypeForCalc->setContentFromString($test);
+echo $goodTypeForCalc->getReadableContent();
+$goodTypeForCalc->saveVarToFile();
 
 $badTypeForCalc = TIVarFile::createNew(TIVarType::createFromName('ExactComplexFrac'), 'Bla', TIModel::createFromName('83PCE'));
 try
@@ -59,8 +71,7 @@ $testPrgmcontent = $testPrgm->getReadableContent(['lang' => 'fr']);
 //echo "testPrgmContent :\n$testPrgmcontent\n";
 $newPrgm->setContentFromString($testPrgmcontent);
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
-//$newPrgm->saveVarToFile();
-
+//$newPrgm->saveVarToFile(".", "asdf");
 
 
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
