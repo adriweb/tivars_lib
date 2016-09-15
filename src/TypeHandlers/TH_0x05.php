@@ -70,7 +70,7 @@ class TH_0x05 implements ITIVarTypeHandler
         array_shift($data); array_shift($data);
         if ($howManyBytes !== count($data))
         {
-            trigger_error("[Warning] Token count (" . count($data) . ") and size field (" . $howManyBytes . ") mismatch!");
+            trigger_error("[Warning] Byte count (" . count($data) . ") and size field (" . $howManyBytes . ") mismatch!");
         }
 
         $errCount = 0;
