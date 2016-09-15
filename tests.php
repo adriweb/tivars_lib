@@ -104,7 +104,6 @@ echo $testExactRealFrac->getReadableContent() . "\n";
 
 $testRealList = TIVarFile::loadFromFile('testData/RealList.8xl');
 echo "Before: " . $testRealList->getReadableContent() . "\t" . "Now: ";
-$testRealList->setContentFromString("{}");
 $testRealList->setContentFromString("{9, 0, .5, -6e-8}");
 echo $testRealList->getReadableContent() . "\n";
 //$testRealList->saveVarToFile('testData', 'RealList_new');

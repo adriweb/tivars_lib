@@ -16,8 +16,8 @@ class TH_0x01 implements ITIVarTypeHandler
 {
     public static function makeDataFromString($str = '', array $options = [])
     {
-        $trimmedStr = trim($str, '{}');
-        $arr = empty($trimmedStr) ? [] : explode(',', $trimmedStr);
+        $arr = explode(',', trim($str, '{}'));
+        $numCount = count($arr);
 
         $formatOk = true;
         foreach ($arr as &$numStr)
@@ -29,14 +29,13 @@ class TH_0x01 implements ITIVarTypeHandler
                 break;
             }
         }
-        if ($str == '' || !$formatOk)
+        if ($str == '' || empty($arr) || !$formatOk || $numCount > 999)
         {
             throw new \Exception("Invalid input string. Needs to be a valid real list");
         }
 
         $data = [];
 
-        $numCount = count($arr);
         $data[0] = $numCount & 0xFF;
         $data[1] = ($numCount >> 8) & 0xFF;
 
@@ -52,7 +51,7 @@ class TH_0x01 implements ITIVarTypeHandler
     {
         $byteCount = count($data);
         $numCount = ($data[0] & 0xFF) + (($data[1] << 8) & 0xFF00);
-        if (count($data) < 2 || (($byteCount - 2) % TH_0x00::dataByteCount !== 0) || ($numCount !== ($byteCount - 2) / TH_0x00::dataByteCount))
+        if (count($data) < 2 || (($byteCount - 2) % TH_0x00::dataByteCount !== 0) || ($numCount !== ($byteCount - 2) / TH_0x00::dataByteCount) || $numCount > 999)
         {
             throw new \Exception('Invalid data array. Needs to contain 2+' . TH_0x00::dataByteCount . '*n bytes');
         }
