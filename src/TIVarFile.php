@@ -344,6 +344,10 @@ class TIVarFile extends BinaryFile
             $handle = fopen($fullPath, 'wb');
         }
 
+        if (!$handle) {
+            throw new \Exception('Could not open destination file: ' . $fullPath);
+        }
+
         $this->refreshMetadataFields();
 
         $bin_data = '';
