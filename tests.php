@@ -115,6 +115,14 @@ echo $testRealList->getReadableContent() . "\n";
 
 
 
+$testStandardMatrix = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
+echo "Before: " . $testStandardMatrix->getReadableContent() . "\t" . "Now: ";
+$testStandardMatrix->setContentFromString("[[1,2,3][4,5,6][-7,-8,-9]]");
+$testStandardMatrix->setContentFromString("[[1,2,3][4,5,6][-7,-8,-9][1,2,3][4,5,6][-7,-8,-9]]");
+echo $testStandardMatrix->getReadableContent() . "\n";
+//$testStandardMatrix->saveVarToFile('testData', 'Matrix_new');
+
+
 
 //$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
 //print_r($testMatrixStandard);
