@@ -6,6 +6,11 @@
  * License: MIT
  */
 
+/*
+ TODO:
+  - varname restrictions for lists, matrix, strings...
+*/
+
 include_once "src/autoloader.php";
 include_once "src/TypeHandlers/TH_0x05.php";
 

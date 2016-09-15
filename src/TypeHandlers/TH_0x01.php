@@ -58,12 +58,15 @@ class TH_0x01 implements ITIVarTypeHandler
 
         $str = '{';
 
-        for ($i = 2; $i < $byteCount; $i += TH_0x00::dataByteCount)
+        for ($i = 2, $num = 0; $i < $byteCount; $i += TH_0x00::dataByteCount, $num++)
         {
-            $str .= TH_0x00::makeStringFromData(array_slice($data, $i, TH_0x00::dataByteCount)) . ',';
+            $str .= TH_0x00::makeStringFromData(array_slice($data, $i, TH_0x00::dataByteCount));
+            if ($num < $numCount - 1) // not last num
+            {
+                $str .= ',';
+            }
         }
 
-        $str = trim($str, ',');
         $str .= '}';
 
         return $str;
