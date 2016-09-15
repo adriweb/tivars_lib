@@ -57,9 +57,6 @@ try
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
 
 
-$testPrgmQuotes = TIVarFile::loadFromFile('testData/testPrgmQuotes.8xp');
-$testPrgmcontent = $testPrgmQuotes->getReadableContent();
-echo "testPrgmContent \$testPrgmQuotes :\n$testPrgmcontent\n";
 
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 echo "testPrgm->getHeader()['entries_len'] == " . $testPrgm->getHeader()['entries_len'] . "\n";
@@ -107,9 +104,10 @@ echo $testExactRealFrac->getReadableContent() . "\n";
 
 $testRealList = TIVarFile::loadFromFile('testData/RealList.8xl');
 echo "Before: " . $testRealList->getReadableContent() . "\t" . "Now: ";
-$testRealList->setContentFromString("{-1,2,999}");
+$testRealList->setContentFromString("{}");
+$testRealList->setContentFromString("{9, 0, .5, -6e-8}");
 echo $testRealList->getReadableContent() . "\n";
-$testRealList->saveVarToFile('testData', 'RealList_new');
+//$testRealList->saveVarToFile('testData', 'RealList_new');
 
 
 

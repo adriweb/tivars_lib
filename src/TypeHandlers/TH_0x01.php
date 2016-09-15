@@ -16,7 +16,8 @@ class TH_0x01 implements ITIVarTypeHandler
 {
     public static function makeDataFromString($str = '', array $options = [])
     {
-        $arr = explode(',', trim($str, '{}'));
+        $trimmedStr = trim($str, '{}');
+        $arr = empty($trimmedStr) ? [] : explode(',', $trimmedStr);
 
         $formatOk = true;
         foreach ($arr as &$numStr)
@@ -28,7 +29,7 @@ class TH_0x01 implements ITIVarTypeHandler
                 break;
             }
         }
-        if ($str == '' || empty($arr) || !$formatOk)
+        if ($str == '' || !$formatOk)
         {
             throw new \Exception("Invalid input string. Needs to be a valid real list");
         }
