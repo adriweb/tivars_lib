@@ -15,8 +15,6 @@ use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
-
-/*
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString("Asm(prgmABCD");
 print_r($newPrgm->getRawContent());
@@ -24,7 +22,6 @@ print_r($newPrgm->getRawContent());
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Real"));
 $newPrgm->setContentFromString("45.2");
 print_r($newPrgm->getRawContent());
-*/
 
 $testString = TIVarFile::loadFromFile("testData/String.8xs");
 assert($testString->getReadableContent() == "Hello World");
@@ -46,7 +43,7 @@ $goodTypeForCalc->setContentFromData($testData);
 $test = $goodTypeForCalc->getReadableContent();
 $goodTypeForCalc->setContentFromString($test);
 echo $goodTypeForCalc->getReadableContent();
-$goodTypeForCalc->saveVarToFile();
+//$goodTypeForCalc->saveVarToFile();
 
 $badTypeForCalc = TIVarFile::createNew(TIVarType::createFromName('ExactComplexFrac'), 'Bla', TIModel::createFromName('83PCE'));
 try
@@ -60,6 +57,9 @@ try
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
 
 
+$testPrgmQuotes = TIVarFile::loadFromFile('testData/testPrgmQuotes.8xp');
+$testPrgmcontent = $testPrgmQuotes->getReadableContent();
+echo "testPrgmContent \$testPrgmQuotes :\n$testPrgmcontent\n";
 
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 echo "testPrgm->getHeader()['entries_len'] == " . $testPrgm->getHeader()['entries_len'] . "\n";
@@ -73,6 +73,7 @@ $newPrgm->setContentFromString($testPrgmcontent);
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 //$newPrgm->saveVarToFile(".", "asdf");
 
+//die();
 
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
 $testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
@@ -104,12 +105,18 @@ echo $testExactRealFrac->getReadableContent() . "\n";
 
 
 
+$testRealList = TIVarFile::loadFromFile('testData/RealList.8xl');
+echo "Before: " . $testRealList->getReadableContent() . "\t" . "Now: ";
+$testRealList->setContentFromString("{-1,2,999}");
+echo $testRealList->getReadableContent() . "\n";
+$testRealList->saveVarToFile('testData', 'RealList_new');
+
+
+
+
 //$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
 //print_r($testMatrixStandard);
 //echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
 //$testExactRealFrac->setContentFromString("0.2");
 //echo $testExactRealFrac->getReadableContent() . "\n";
 //$testExactRealFrac->saveVarToFile();
-
-
-?>
