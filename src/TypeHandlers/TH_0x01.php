@@ -51,8 +51,8 @@ class TH_0x01 implements ITIVarTypeHandler
     {
         $byteCount = count($data);
         $numCount = ($data[0] & 0xFF) + (($data[1] << 8) & 0xFF00);
-        if (count($data) < 2+TH_0x00::dataByteCount || (($byteCount - 2) % TH_0x00::dataByteCount !== 0)
-            || ($numCount !== ($byteCount - 2) / TH_0x00::dataByteCount) || $numCount > 999)
+        if ($byteCount < 2+TH_0x00::dataByteCount || (($byteCount - 2) % TH_0x00::dataByteCount !== 0)
+            || ($numCount !== (int)(($byteCount - 2) / TH_0x00::dataByteCount)) || $numCount > 999)
         {
             throw new \Exception('Invalid data array. Needs to contain 2+' . TH_0x00::dataByteCount . '*n bytes');
         }

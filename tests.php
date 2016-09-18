@@ -20,13 +20,22 @@ use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
+$testReal42 = TIVarFile::createNew(TIVarType::createFromName("Real"), "R");
+$testReal42->setCalcModel(TIModel::createFromName("84+"));
+$testReal42->setContentFromString('9001.42');
+assert($testReal42->getReadableContent() === '9001.42');
+$testReal42->setContentFromString('-0.00000008');
+assert((float)$testReal42->getReadableContent() === -8e-08);
+
+
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString("Asm(prgmABCD");
 print_r($newPrgm->getRawContent());
 
-$newPrgm = TIVarFile::createNew(TIVarType::createFromName("Real"));
-$newPrgm->setContentFromString("45.2");
-print_r($newPrgm->getRawContent());
+$newReal = TIVarFile::createNew(TIVarType::createFromName("Real"));
+$newReal->setContentFromString(".5");
+echo "testReal.getReadableContent() : " . $newReal->getReadableContent() . "\n";
+print_r($newReal->getRawContent());
 
 $testString = TIVarFile::loadFromFile("testData/String.8xs");
 assert($testString->getReadableContent() == "Hello World");
@@ -60,7 +69,6 @@ try
 
 
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
-
 
 
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');

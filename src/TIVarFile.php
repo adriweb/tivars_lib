@@ -315,15 +315,18 @@ class TIVarFile extends BinaryFile
      * If the variable was already loaded from a file, it will be used and overwritten,
      * except if a specific directory and name are provided.
      *
-     * @param   string  $directory  Directory to save the file to
-     * @param   string  $name       Name of the file, without the extension
+     * @param   string $directory Directory to save the file to
+     * @param   string $name      Name of the file, without the extension
+     *
+     * @throws \Exception (if output file can't be written to)
      */
     public function saveVarToFile($directory = '', $name = '')
     {
+        $fullPath = '';
         if ($this->isFromFile && $directory === '')
         {
+            $fullPath = $this->filePath;
             $this->close();
-            $handle = fopen($this->filePath, 'wb');
         } else {
             if ($name === '')
             {
@@ -341,9 +344,9 @@ class TIVarFile extends BinaryFile
             }
             $directory = rtrim($directory, '/');
             $fullPath = realpath($directory) . '/' . $fileName;
-            $handle = fopen($fullPath, 'wb');
         }
 
+        $handle = fopen($fullPath, 'wb');
         if (!$handle) {
             throw new \Exception('Could not open destination file: ' . $fullPath);
         }

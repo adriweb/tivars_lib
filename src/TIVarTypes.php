@@ -33,7 +33,8 @@ abstract class TIVarTypes
     }
 
     // 82+/83+/84+ are grouped since only the clock is the difference, and it doesn't have an actual varType.
-    public static function initTIVarTypesArray() // order: 82     83   82A 82+/83+/84+ 84+CSE 84+CE 83PCE
+    // 82A/84+T are also grouped since they're pretty much the same SW-wise and HW-wise
+    public static function initTIVarTypesArray() // order:  82   83 82A/84+T 82+/83+/84+ 84+C 84+CE 83PCE
     {
         self::insertType('Unknown',                -1,  [ null,  null,  null,  null,  null,  null,  null]);
 

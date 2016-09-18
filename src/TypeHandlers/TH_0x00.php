@@ -54,7 +54,7 @@ class TH_0x00 implements ITIVarTypeHandler
         $number     = '';
         for ($i = 2; $i < self::dataByteCount; $i++)
         {
-            $number .= dechex($data[$i]);
+            $number .= sprintf("%02X", $data[$i]);
         }
         $number = substr($number, 0, 1) . '.' . substr($number, 1);
         $number = ($isNegative ? -1 : 1) * pow(10, $exponent) * ((float)$number);
