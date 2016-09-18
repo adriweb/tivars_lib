@@ -20,12 +20,15 @@ class TH_0x02 implements ITIVarTypeHandler
         {
             throw new \Exception("Invalid input string. Needs to be a valid matrix");
         }
-        $str = substr($str, 1, -1);
-        $matrix = explode('][', $str);
+        $matrix = explode('][', substr($str, 2, -2));
         $rowCount = count($matrix);
-        $matrix[0] = substr($matrix[0], 1);
-        $matrix[$rowCount-1] = substr($matrix[$rowCount-1], 0, -1);
         $colCount = substr_count($matrix[0], ',') + 1;
+
+        if ($colCount > 255 || $rowCount > 255)
+        {
+            throw new \Exception("Invalid input string. Needs to be a valid matrix (max col/row = 255)");
+        }
+
         foreach ($matrix as &$row)
         {
             $row = explode(',', $row);
@@ -33,11 +36,6 @@ class TH_0x02 implements ITIVarTypeHandler
             {
                 throw new \Exception("Invalid input string. Needs to be a valid matrix (consistent column count)");
             }
-        }
-
-        if ($colCount > 255 || $rowCount > 255)
-        {
-            throw new \Exception("Invalid input string. Needs to be a valid matrix (max col/row = 255)");
         }
 
         foreach ($matrix as &$row)
