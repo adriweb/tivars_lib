@@ -140,7 +140,7 @@ $newComplex->setContentFromString('-5+2i');
 assert($testComplex->getRawContent() === $newComplex->getRawContent());
 $newComplex->setContentFromString('2.5+0.001i');
 echo $newComplex->getReadableContent() . "\n";
-$newComplex->saveVarToFile("/Users/adriweb/", "trololol");
+//$newComplex->saveVarToFile("/Users/adriweb/", "trololol");
 
 
 

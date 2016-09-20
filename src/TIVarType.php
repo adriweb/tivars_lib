@@ -56,7 +56,7 @@ class TIVarType
         $typeID = (int)$typeID;
         if (TIVarTypes::isValidID($typeID))
         {
-            $typeID_hex = (($typeID < 0x10) ? '0' : '') . dechex($typeID);
+            $typeID_hex = sprintf("%02X", $typeID);
             $handlerName = "TH_0x{$typeID_hex}";
             $handlerIncludePath = __DIR__ . "/TypeHandlers/{$handlerName}.php";
             if (file_exists($handlerIncludePath))
