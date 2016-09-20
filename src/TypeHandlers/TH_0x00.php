@@ -14,6 +14,7 @@ include_once "ITIVarTypeHandler.php";
 class TH_0x00 implements ITIVarTypeHandler
 {
     const dataByteCount = 9;
+    const validPattern  = '([-+]?[0-9]*\.?[0-9]+(?:e[-+]?[0-9]{1,2})?)';
 
     public static function makeDataFromString($str = '', array $options = [])
     {

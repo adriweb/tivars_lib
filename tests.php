@@ -132,6 +132,18 @@ echo $testStandardMatrix->getReadableContent() . "\n";
 
 
 
+$testComplex = TIVarFile::loadFromFile('testData/Complex.8xc'); // -5 + 2i
+echo $testComplex->getReadableContent() . "\n";
+assert($testComplex->getReadableContent() === '-5+2i');
+$newComplex = TIVarFile::createNew(TIVarType::createFromName("Complex"), "C");
+$newComplex->setContentFromString('-5+2i');
+assert($testComplex->getRawContent() === $newComplex->getRawContent());
+$newComplex->setContentFromString('2.5+0.001i');
+echo $newComplex->getReadableContent() . "\n";
+$newComplex->saveVarToFile("/Users/adriweb/", "trololol");
+
+
+
 //$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
 //print_r($testMatrixStandard);
 //echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
