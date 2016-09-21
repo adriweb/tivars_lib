@@ -13,8 +13,6 @@ include_once "ITIVarTypeHandler.php";
 // Type Handler for type 0x0C: Complex Number
 class TH_0x0C implements ITIVarTypeHandler
 {
-    const dataByteCount = 9;
-
     public static function makeDataFromString($str = '', array $options = [])
     {
         $str = str_replace(' ', '', $str);
@@ -33,14 +31,9 @@ class TH_0x0C implements ITIVarTypeHandler
 
         $data = [];
 
-        $coeffs = [
-            /* real coeff */ (float)$matches[1],
-            /* imag coeff */ (float)$matches[2]
-        ];
-
         for ($i=0; $i<2; $i++)
         {
-            $coeff = $coeffs[$i];
+            $coeff = $matches[$i+1];
 
             $data = array_merge($data, TH_0x00::makeDataFromString($coeff));
 
