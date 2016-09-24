@@ -144,6 +144,14 @@ echo $newComplex->getReadableContent() . "\n";
 
 
 
+$testComplexList = TIVarFile::loadFromFile('testData/ComplexList.8xl');
+echo "Before: " . $testComplexList->getReadableContent() . "\t" . "Now: ";
+$testComplexList->setContentFromString("{9+2i, 0i, .5, -0.5+6e-8i}");
+echo $testComplexList->getReadableContent() . "\n";
+//$testComplexList->saveVarToFile('testData', 'ComplexList_new');
+
+
+
 //$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
 //print_r($testMatrixStandard);
 //echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
