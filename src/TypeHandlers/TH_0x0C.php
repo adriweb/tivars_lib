@@ -13,7 +13,8 @@ include_once "ITIVarTypeHandler.php";
 // Type Handler for type 0x0C: Complex Number
 class TH_0x0C implements ITIVarTypeHandler
 {
-    const dataByteCount = 2 * TH_0x00::dataByteCount;
+    /* Hardcoded to keep PHP 5.5 compatibilty */
+    const dataByteCount = 18; // 2 * TH_0x00::dataByteCount;
 
     public static function makeDataFromString($str = '', array $options = [])
     {
