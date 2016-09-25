@@ -6,6 +6,8 @@
  * License: MIT
  */
 
+require_once "utils.php";
+
 include_once "TIVarTypes.php";
 include_once "TIVarType.php";
 include_once "TIModels.php";
