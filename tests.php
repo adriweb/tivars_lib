@@ -144,6 +144,16 @@ echo $testComplexList->getReadableContent() . "\n";
 
 
 
+$testExact_RealRadical = TIVarFile::loadFromFile('testData/Exact_RealRadical.8xn');
+assert($testExact_RealRadical->getReadableContent() === '(41*√(789)+14*√(654))/259');
+echo "Before: " . $testExact_RealRadical->getReadableContent() . "\n";
+$newExact_RealRadical = TIVarFile::createNew(TIVarType::createFromName("ExactRealRadical"), "A", TIModel::createFromName('83PCE'));
+//$newExact_RealRadical->setContentFromString('-42.1337');
+//assert($testExact_RealRadical->getRawContent() === $newExact_RealRadical->getRawContent());
+//$newExact_RealRadical->saveVarToFile("/Users/adriweb/", "trololol");
+
+
+
 $testExactComplexFrac = TIVarFile::loadFromFile('testData/Exact_ComplexFrac.8xc');
 assert($testExactComplexFrac->getReadableContent() === '1/5-2/5i');
 echo "Before: " . $testExactComplexFrac->getReadableContent() . "\n";
