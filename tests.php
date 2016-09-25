@@ -107,14 +107,6 @@ assert($testReal->getRawContent() === $newReal->getRawContent());
 
 
 
-$testExactRealFrac = TIVarFile::loadFromFile('testData/Exact_RealFrac.8xn');
-echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
-$testExactRealFrac->setContentFromString("0.2");
-echo $testExactRealFrac->getReadableContent() . "\n";
-//$testExactRealFrac->saveVarToFile();
-
-
-
 $testRealList = TIVarFile::loadFromFile('testData/RealList.8xl');
 echo "Before: " . $testRealList->getReadableContent() . "\t" . "Now: ";
 $testRealList->setContentFromString("{9, 0, .5, -6e-8}");
@@ -149,6 +141,16 @@ echo "Before: " . $testComplexList->getReadableContent() . "\t" . "Now: ";
 $testComplexList->setContentFromString("{9+2i, 0i, .5, -0.5+6e-8i}");
 echo $testComplexList->getReadableContent() . "\n";
 //$testComplexList->saveVarToFile('testData', 'ComplexList_new');
+
+
+
+$testExactComplexFrac = TIVarFile::loadFromFile('testData/Exact_ComplexFrac.8xc');
+assert($testExactComplexFrac->getReadableContent() === '1/5-2/5i');
+echo "Before: " . $testExactComplexFrac->getReadableContent() . "\n";
+$newExactComplexFrac = TIVarFile::createNew(TIVarType::createFromName("ExactRealRadical"), "A", TIModel::createFromName('83PCE'));
+//$newExactComplexFrac->setContentFromString('-42.1337');
+//assert($testExactComplexFrac->getRawContent() === $newExactComplexFrac->getRawContent());
+//$newExactComplexFrac->saveVarToFile("/Users/adriweb/", "trololol");
 
 
 
