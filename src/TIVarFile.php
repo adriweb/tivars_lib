@@ -14,22 +14,27 @@ require_once "BinaryFile.php";
 
 class TIVarFile extends BinaryFile
 {
+    const headerLength      = 55;   // 8+3+42+2, see $header array below
+    const dataSectionOffset = 55;   // == headerLength
+    const varEntryOldLength = 0x0B; // 2+1+8     (if $calcFlags <  TIFeatureFlags::hasFlash)
+    const varEntryNewLength = 0x0D; // 2+1+8+1+1 (if $calcFlags >= TIFeatureFlags::hasFlash)
+
     private $header = [
-        'signature'     => null,
-        'sig_extra'     => null,
-        'comment'       => null,
-        'entries_len'   => null
+        'signature'     => null, //  8 bytes
+        'sig_extra'     => null, //  3 bytes
+        'comment'       => null, // 42 bytes
+        'entries_len'   => null  //  2 bytes
     ];
 
     private $varEntry = [
-        'constBytes'    => null,
-        'data_length'   => null,
-        'typeID'        => null,
-        'varname'       => null,
-        'version'       => null,
-        'archivedFlag'  => null,
-        'data_length2'  => null,
-        'data'          => null
+        'entryMetaLen'  => null, //  2 bytes (byte count of the next 3 or 5 fields (== 11 or 13) depending on $calcFlags, see below)
+        'data_length'   => null, //  2 bytes
+        'typeID'        => null, //  1 byte
+        'varname'       => null, //  8 bytes
+        'version'       => null, //  1 byte (present only if $calcFlags >= TIFeatureFlags::hasFlash)
+        'archivedFlag'  => null, //  1 byte (present only if $calcFlags >= TIFeatureFlags::hasFlash)
+        'data_length2'  => null, //  2 bytes, same as data_length
+        'data'          => null  //  n bytes
     ];
 
     /** @var TIVarType */
@@ -64,6 +69,9 @@ class TIVarFile extends BinaryFile
             $this->makeVarEntryFromFile();
             $this->computedChecksum = $this->computeChecksumFromFileData();
             $this->inFileChecksum = $this->getChecksumValueFromFile();
+            if ($this->computedChecksum !== $this->inFileChecksum) {
+                echo "[Warning] File is corrupt (read and calculated checksums differ)\n";
+            }
             $this->type = TIVarType::createFromID($this->varEntry['typeID']);
         } else {
             $this->isFromFile = false;
@@ -101,17 +109,28 @@ class TIVarFile extends BinaryFile
                 'comment'       =>  str_pad("Created by tivars_lib on " . date("M j, Y"), 42, "\0"),
                 'entries_len'   =>  0 // will have to be overwritten later
             ];
-            $calcFlags = $instance->calcModel->getFlags();
+
+            // Default cases for >= TIFeatureFlags::hasFlash. It's fixed right after if necessary.
+            // This is done that way because the field order is important - the ones that change can't simply be added afterwards.
             $instance->varEntry = [
-                'constBytes'    =>  [ 0x0D, 0x00 ],
+                'entryMetaLen'  =>  [ self::varEntryNewLength, 0x00 ],
                 'data_length'   =>  0, // will have to be overwritten later
                 'typeID'        =>  $type->getId(),
                 'varname'       =>  str_pad($name, 8, "\0"),
-                'version'       =>  ($calcFlags >= TIFeatureFlags::hasFlash) ? 0 : null,
-                'archivedFlag'  =>  ($calcFlags >= TIFeatureFlags::hasFlash) ? 0 : null, // TODO: check when that needs to be 1.
+                'version'       =>  0, // present for >= hasFlash ; may be removed after
+                'archivedFlag'  =>  0, // present for >= hasFlash ; may be removed after // TODO: check when that needs to be 1.
                 'data_length2'  =>  0, // will have to be overwritten later
                 'data'          =>  [] // will have to be overwritten later
             ];
+
+            // Deal with the hasFlash flag "issue" mentioned above.
+            if ($instance->calcModel->getFlags() < TIFeatureFlags::hasFlash)
+            {
+                $instance->varEntry['entryMetaLen'] = [ self::varEntryOldLength, 0x00 ];
+                unset($instance->varEntry['version']);
+                unset($instance->varEntry['archivedFlag']);
+            }
+
             return $instance;
         } else {
             throw new \Exception("No type given");
@@ -135,15 +154,17 @@ class TIVarFile extends BinaryFile
     private function makeVarEntryFromFile()
     {
         $calcFlags = $this->calcModel->getFlags();
-        $dataSectionOffset = (8+3+42+2); // after header
-        fseek($this->file, $dataSectionOffset);
+        fseek($this->file, self::dataSectionOffset);
         $this->varEntry = [];
-        $this->varEntry['constBytes']   = $this->get_raw_bytes(2);
+        $this->varEntry['entryMetaLen'] = $this->get_raw_bytes(2);
         $this->varEntry['data_length']  = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['typeID']       = $this->get_raw_bytes(1)[0];
         $this->varEntry['varname']      = $this->get_string_bytes(8);
-        $this->varEntry['version']      = ($calcFlags >= TIFeatureFlags::hasFlash) ? $this->get_raw_bytes(1)[0] : null;
-        $this->varEntry['archivedFlag'] = ($calcFlags >= TIFeatureFlags::hasFlash) ? $this->get_raw_bytes(1)[0] : null;
+        if ($calcFlags >= TIFeatureFlags::hasFlash)
+        {
+            $this->varEntry['version']      = $this->get_raw_bytes(1)[0];
+            $this->varEntry['archivedFlag'] = $this->get_raw_bytes(1)[0];
+        }
         $this->varEntry['data_length2'] = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['data']         = $this->get_raw_bytes($this->varEntry['data_length']);
     }
@@ -174,10 +195,9 @@ class TIVarFile extends BinaryFile
     {
         if ($this->isFromFile)
         {
-            $dataSectionOffset = (8 + 3 + 42 + 2); // after header
-            fseek($this->file, $dataSectionOffset);
+            fseek($this->file, self::dataSectionOffset);
             $sum = 0;
-            for ($i = $dataSectionOffset; $i < $this->fileSize - 2; $i++)
+            for ($i = self::dataSectionOffset; $i < $this->fileSize - 2; $i++)
             {
                 $sum += $this->get_raw_bytes(1)[0];
             }
@@ -190,12 +210,17 @@ class TIVarFile extends BinaryFile
     private function computeChecksumFromInstanceData()
     {
         $sum = 0;
-        $sum += array_sum($this->varEntry['constBytes']);
+        $sum += array_sum($this->varEntry['entryMetaLen']);
         $sum += 2 * (($this->varEntry['data_length'] & 0xFF) + (($this->varEntry['data_length'] >> 8) & 0xFF));
-        $sum += $this->varEntry['typeID'] + (int)$this->varEntry['version'] + (int)$this->varEntry['archivedFlag'];
+        $sum += $this->varEntry['typeID'];
         $sum += array_sum(array_map('ord', str_split($this->varEntry['varname'])));
         $sum += array_sum($this->varEntry['data']);
-        return $sum & 0xFFFF;
+        if ($this->calcModel->getFlags() >= TIFeatureFlags::hasFlash)
+        {
+            $sum += $this->varEntry['version'];
+            $sum += $this->varEntry['archivedFlag'];
+        }
+        return ($sum & 0xFFFF);
     }
 
     private function getChecksumValueFromFile()
@@ -214,8 +239,13 @@ class TIVarFile extends BinaryFile
      */
     private function refreshMetadataFields()
     {
-        $this->varEntry['data_length'] = $this->varEntry['data_length2'] = count($this->varEntry['data']);
-        $this->header['entries_len'] = $this->varEntry['data_length'] + 17; // 17 == sum of the individual sizes.
+        // todo : recompute correctly for multiple var entries
+        $this->varEntry['data_length2'] = $this->varEntry['data_length'] = count($this->varEntry['data']);
+
+        $this->header['entries_len'] = $this->varEntry['data_length']
+                                     + ($this->calcModel->getFlags() >= TIFeatureFlags::hasFlash) ? self::varEntryNewLength
+                                                                                                  : self::varEntryOldLength;
+
         $this->computedChecksum = $this->computeChecksumFromInstanceData();
     }
 
