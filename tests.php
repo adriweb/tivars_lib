@@ -28,21 +28,28 @@ $testReal42->setContentFromString('-0.00000008');
 assert((float)$testReal42->getReadableContent() === -8e-08);
 
 
+
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString("Asm(prgmABCD");
 print_r($newPrgm->getRawContent());
+
+
 
 $newReal = TIVarFile::createNew(TIVarType::createFromName("Real"));
 $newReal->setContentFromString(".5");
 echo "testReal.getReadableContent() : " . $newReal->getReadableContent() . "\n";
 print_r($newReal->getRawContent());
 
+
+
 $testString = TIVarFile::loadFromFile("testData/String.8xs");
 assert($testString->getReadableContent() == "Hello World");
 
 
+
 $testEquation = TIVarFile::loadFromFile("testData/Equation_Y1T.8xy");
 assert($testEquation->getReadableContent() == "3sin(T)+4");
+
 
 
 $testReal = TIVarFile::loadFromFile("testData/Real.8xn");
@@ -71,6 +78,7 @@ try
 assert(TIVarTypes::getIDFromName("ExactRealPi") === 32);
 
 
+
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 echo "testPrgm->getHeader()['entries_len'] == " . $testPrgm->getHeader()['entries_len'] . "\n";
 echo "testPrgm->size() - 57 == " . ($testPrgm->size() - 57) . "\n";
@@ -81,13 +89,13 @@ $testPrgmcontent = $testPrgm->getReadableContent(['lang' => 'fr']);
 //echo "testPrgmContent :\n$testPrgmcontent\n";
 $newPrgm->setContentFromString($testPrgmcontent);
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
-//$newPrgm->saveVarToFile(".", "asdf");
 
-//die();
+
 
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
 $testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
 echo "All prettified and reindented:\n" . $testPrgmcontent . "\n";
+//$testPrgm->saveVarToFile("testData", "ProtectedProgram_long_Resaved");
 
 
 
@@ -95,6 +103,7 @@ $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName("Program"));
 $newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));
 assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
+//$newPrgm->saveVarToFile("testData", "Program_new");
 
 
 
@@ -103,7 +112,7 @@ $newReal = TIVarFile::createNew(TIVarType::createFromName("Real"), "A");
 $newReal->setContentFromString('-42.1337');
 assert($testReal->getReadableContent() === '-42.1337');
 assert($testReal->getRawContent() === $newReal->getRawContent());
-//$newReal->saveVarToFile("/Users/adriweb/", "trololol");
+//$newReal->saveVarToFile("testData", "Real_new");
 
 
 
@@ -111,7 +120,7 @@ $testRealList = TIVarFile::loadFromFile('testData/RealList.8xl');
 echo "Before: " . $testRealList->getReadableContent() . "\t" . "Now: ";
 $testRealList->setContentFromString("{9, 0, .5, -6e-8}");
 echo $testRealList->getReadableContent() . "\n";
-//$testRealList->saveVarToFile('testData', 'RealList_new');
+//$testRealList->saveVarToFile("testData", 'RealList_new');
 
 
 
@@ -132,7 +141,7 @@ $newComplex->setContentFromString('-5+2i');
 assert($testComplex->getRawContent() === $newComplex->getRawContent());
 $newComplex->setContentFromString('2.5+0.001i');
 echo $newComplex->getReadableContent() . "\n";
-//$newComplex->saveVarToFile("/Users/adriweb/", "trololol");
+//$newComplex->saveVarToFile('testData', "Complex_new");
 
 
 
@@ -150,7 +159,7 @@ echo "Before: " . $testExact_RealRadical->getReadableContent() . "\n";
 $newExact_RealRadical = TIVarFile::createNew(TIVarType::createFromName("ExactRealRadical"), "A", TIModel::createFromName('83PCE'));
 //$newExact_RealRadical->setContentFromString('-42.1337');
 //assert($testExact_RealRadical->getRawContent() === $newExact_RealRadical->getRawContent());
-//$newExact_RealRadical->saveVarToFile("/Users/adriweb/", "trololol");
+//$newExact_RealRadical->saveVarToFile('testData', "trololol");
 
 
 
@@ -160,7 +169,7 @@ echo "Before: " . $testExactComplexFrac->getReadableContent() . "\n";
 $newExactComplexFrac = TIVarFile::createNew(TIVarType::createFromName("ExactRealRadical"), "A", TIModel::createFromName('83PCE'));
 //$newExactComplexFrac->setContentFromString('-42.1337');
 //assert($testExactComplexFrac->getRawContent() === $newExactComplexFrac->getRawContent());
-//$newExactComplexFrac->saveVarToFile("/Users/adriweb/", "trololol");
+//$newExactComplexFrac->saveVarToFile("testData", "trololol");
 
 
 

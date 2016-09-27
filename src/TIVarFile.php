@@ -6,11 +6,11 @@
  * License: MIT
  */
 
+// TODO: Handle multiple varEntries
+
 namespace tivars;
 
-date_default_timezone_set('UTC');
-
-include_once "BinaryFile.php";
+require_once "BinaryFile.php";
 
 class TIVarFile extends BinaryFile
 {
@@ -20,6 +20,7 @@ class TIVarFile extends BinaryFile
         'comment'       => null,
         'entries_len'   => null
     ];
+
     private $varEntry = [
         'constBytes'    => null,
         'data_length'   => null,
@@ -30,15 +31,16 @@ class TIVarFile extends BinaryFile
         'data_length2'  => null,
         'data'          => null
     ];
+
     /** @var TIVarType */
     private $type = null;
+
     /** @var TIModel */
     private $calcModel = null;
+
     private $computedChecksum = null;
     private $inFileChecksum = null;
     private $isFromFile = null;
-
-    // TODO: Handle multiple varEntries
 
 
     /*** Constructors ***/
@@ -165,14 +167,6 @@ class TIVarFile extends BinaryFile
     }
 
 
-    /*** Utils. ***/
-
-    public function isValid()
-    {
-        return ($this->isFromFile) ? ($this->computedChecksum === $this->inFileChecksum)
-                                   : ($this->computedChecksum !== null);
-    }
-
 
     /*** Private actions ***/
 
@@ -189,8 +183,7 @@ class TIVarFile extends BinaryFile
             }
             return $sum & 0xFFFF;
         } else {
-            echo "[Error] No file loaded";
-            return -1;
+            throw new \Exception("No file loaded to compute checksum from");
         }
     }
 
@@ -212,8 +205,7 @@ class TIVarFile extends BinaryFile
             fseek($this->file, $this->fileSize - 2);
             return $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         } else {
-            echo "[Error] No file loaded";
-            return -1;
+            throw new \Exception("No file loaded to compute checksum from");
         }
     }
 
@@ -246,8 +238,9 @@ class TIVarFile extends BinaryFile
     /*** Public actions **/
 
     /**
-    * @param    array   $data   The array of bytes
-    */
+     * @param   array $data The array of bytes
+     * @throws  \Exception
+     */
     public function setContentFromData(array $data = [])
     {
         if ($data !== [])
@@ -255,11 +248,11 @@ class TIVarFile extends BinaryFile
             $this->varEntry['data'] = $data;
             $this->refreshMetadataFields();
         } else {
-            echo "[Error] No data given";
+            throw new \Exception("No data given");
         }
     }
 
-    public function setContentFromString($str = '', $options = [])
+    public function setContentFromString($str = '', array $options = [])
     {
         $handler = $this->type->getTypeHandler();
         $this->varEntry['data'] = $handler::makeDataFromString($str, $options);
@@ -289,25 +282,10 @@ class TIVarFile extends BinaryFile
         return $this->varEntry['data'];
     }
 
-    public function getReadableContent($options = [])
+    public function getReadableContent(array $options = [])
     {
         $handler = $this->type->getTypeHandler();
         return $handler::makeStringFromData($this->varEntry['data'], $options);
-    }
-
-    public function fixChecksumInFile()
-    {
-        if ($this->isFromFile)
-        {
-            if (!$this->isValid())
-            {
-                fseek($this->file, $this->fileSize - 2);
-                fwrite($this->file, chr($this->computedChecksum & 0xFF) . chr(($this->computedChecksum >> 8) & 0xFF));
-                $this->inFileChecksum = $this->getChecksumValueFromFile();
-            }
-        } else {
-            echo "[Error] No file loaded";
-        }
     }
 
     /**

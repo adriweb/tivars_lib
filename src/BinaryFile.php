@@ -8,6 +8,8 @@
 
 namespace tivars;
 
+date_default_timezone_set('UTC');
+
 class BinaryFile
 {
     protected $file = null;
