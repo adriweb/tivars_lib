@@ -210,6 +210,26 @@ $newExactComplexRadical = TIVarFile::createNew(TIVarType::createFromName("ExactR
 
 
 
+$testExactRealPi = TIVarFile::loadFromFile('testData/Exact_RealPi.8xn');
+assert($testExactRealPi->getReadableContent() === '30*π');
+echo "Before: " . $testExactRealPi->getReadableContent() . "\n";
+$newExactRealPi = TIVarFile::createNew(TIVarType::createFromName("ExactRealPi"), "A", TIModel::createFromName('83PCE'));
+//$newExactRealPi->setContentFromString('-42.1337');
+//assert($testExactRealPi->getRawContent() === $newExactRealPi->getRawContent());
+//$newExactRealPi->saveVarToFile("testData", "Exact_RealPi_new");
+
+
+
+$testExactRealPiFrac = TIVarFile::loadFromFile('testData/Exact_RealPiFrac.8xn');
+assert($testExactRealPiFrac->getReadableContent() === '2/7*π');
+echo "Before: " . $testExactRealPiFrac->getReadableContent() . "\n";
+$newExactRealPiFrac = TIVarFile::createNew(TIVarType::createFromName("ExactRealPiFrac"), "A", TIModel::createFromName('83PCE'));
+//$newExactRealPiFrac->setContentFromString('-42.1337');
+//assert($testExactRealPiFrac->getRawContent() === $newExactRealPiFrac->getRawContent());
+//$newExactRealPiFrac->saveVarToFile("testData", "Exact_RealPiFrac_new");
+
+
+
 //$testMatrixStandard = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
 //print_r($testMatrixStandard);
 //echo "Before: " . $testExactRealFrac->getReadableContent() . "\t" . "Now: ";
