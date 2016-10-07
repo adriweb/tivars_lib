@@ -47,6 +47,7 @@ class TIVarFile extends BinaryFile
     private $inFileChecksum = null;
     private $isFromFile = null;
 
+    private $corrupt = null;
 
     /*** Constructors ***/
 
@@ -70,7 +71,8 @@ class TIVarFile extends BinaryFile
             $this->computedChecksum = $this->computeChecksumFromFileData();
             $this->inFileChecksum = $this->getChecksumValueFromFile();
             if ($this->computedChecksum !== $this->inFileChecksum) {
-                echo "[Warning] File is corrupt (read and calculated checksums differ)\n";
+                //echo "[Warning] File is corrupt (read and calculated checksums differ)\n";
+                $this->corrupt = true;
             }
             $this->type = TIVarType::createFromID($this->varEntry['typeID']);
         } else {
@@ -153,14 +155,13 @@ class TIVarFile extends BinaryFile
 
     private function makeVarEntryFromFile()
     {
-        $calcFlags = $this->calcModel->getFlags();
         fseek($this->file, self::dataSectionOffset);
         $this->varEntry = [];
         $this->varEntry['entryMetaLen'] = $this->get_raw_bytes(2);
         $this->varEntry['data_length']  = $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         $this->varEntry['typeID']       = $this->get_raw_bytes(1)[0];
         $this->varEntry['varname']      = $this->get_string_bytes(8);
-        if ($calcFlags >= TIFeatureFlags::hasFlash)
+        if ($this->calcModel->getFlags() >= TIFeatureFlags::hasFlash)
         {
             $this->varEntry['version']      = $this->get_raw_bytes(1)[0];
             $this->varEntry['archivedFlag'] = $this->get_raw_bytes(1)[0];
@@ -399,6 +400,8 @@ class TIVarFile extends BinaryFile
         fwrite($handle, chr($this->computedChecksum & 0xFF) . chr(($this->computedChecksum >> 8) & 0xFF));
 
         fclose($handle);
+
+        $this->corrupt = false;
     }
 
 }
