@@ -39,7 +39,7 @@ $testPrgm42 = TIVarFile::createNew(TIVarType::createFromName("Program"), "asdf")
 $testPrgm42->setCalcModel(TIModel::createFromName("82"));
 $testPrgm42->setContentFromString("");
 $testPrgm42->setVarName("Toto");
-$testPrgm42->saveVarToFile("testData", "blablaTOTO_new");
+//$testPrgm42->saveVarToFile("testData", "blablaTOTO_new");
 
 
 $newReal = TIVarFile::createNew(TIVarType::createFromName("Real"));
@@ -203,7 +203,7 @@ $newExactComplexPiFrac = TIVarFile::createNew(TIVarType::createFromName("ExactCo
 $testExactComplexRadical = TIVarFile::loadFromFile('testData/Exact_ComplexRadical.8xc');
 assert($testExactComplexRadical->getReadableContent() === '((√(6)+√(2))/4)+((√(6)-√(2))/4)*i');
 echo "Before: " . $testExactComplexRadical->getReadableContent() . "\n";
-$newExactComplexRadical = TIVarFile::createNew(TIVarType::createFromName("ExactRealRadical"), "A", TIModel::createFromName('83PCE'));
+$newExactComplexRadical = TIVarFile::createNew(TIVarType::createFromName("ExactComplexRadical"), "A", TIModel::createFromName('83PCE'));
 //$newExactComplexRadical->setContentFromString('-42.1337');
 //assert($testExactComplexRadical->getRawContent() === $newExactComplexRadical->getRawContent());
 //$newExactComplexRadical->saveVarToFile("testData", "Exact_ComplexRadical_new");

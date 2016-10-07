@@ -10,7 +10,7 @@ namespace tivars\TypeHandlers;
 
 include_once "ITIVarTypeHandler.php";
 
-// Type Handler for type 0x1E: ComplexPi
+// Type Handler for type 0x1E: ExactComplexPi
 class TH_0x1E implements ITIVarTypeHandler
 {
     /* Hardcoded to keep PHP 5.5 compatibilty */
