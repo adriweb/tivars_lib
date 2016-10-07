@@ -39,9 +39,9 @@ class TH_0x1C implements ITIVarTypeHandler
         }
 
         $type = substr($dataStr, 0, 2);
-        if (('TH_0x' . $type) !== (new \ReflectionClass(self::class))->getShortName())
+        if (!($type === '1C' || $type === '1D')) // real or complex (two reals, see TH_1D)
         {
-            throw new \Exception('Invalid data bytes - inconsistent vartype: ' . $type);
+            throw new \Exception('Invalid data bytes - invalid vartype: ' . $type);
         }
 
         $subtype = substr($dataStr, 2, 1);
@@ -59,6 +59,11 @@ class TH_0x1C implements ITIVarTypeHandler
         ];
 
         $str = '(' . $parts[0] . '*√(' . $parts[1] .')' . $parts[2] . '*√(' . $parts[3] .'))/'. $parts[4];
+
+        // Improve final display
+        $str = str_replace('+1*', '+', $str); $str = str_replace('(1*',  '(',  $str);
+        $str = str_replace('-1*', '-', $str); $str = str_replace('(-1*', '(-', $str);
+        $str = str_replace('+-',  '-', $str);
 
         return $str;
     }
