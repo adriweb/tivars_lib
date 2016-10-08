@@ -36,7 +36,7 @@ class TH_0x1E implements ITIVarTypeHandler
         $coeffR = TH_0x00::makeStringFromData(array_slice($data, 0, TH_0x00::dataByteCount));
         $coeffI = TH_0x00::makeStringFromData(array_slice($data, TH_0x00::dataByteCount, TH_0x00::dataByteCount));
 
-        $str = (($coeffR !== '0') ? (dec2frac($coeffR) . '+')  : '')
+        $str = (($coeffR !== '0') ? (dec2frac($coeffR) . '+') : '')
              . (($coeffI !== '0') ? ($coeffI . '*π*i') : '');
 
         // Improve final display

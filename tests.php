@@ -101,7 +101,9 @@ assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 
 $testPrgm = TIVarFile::loadFromFile('testData/ProtectedProgram_long.8xp');
 $testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
-echo "All prettified and reindented:\n" . $testPrgmcontent . "\n";
+//echo "All prettified and reindented:\n" . $testPrgmcontent . "\n";
+// For HTML output:
+// echo '<pre><code>' . htmlentities($testPrgmcontent, ENT_QUOTES) . '</code></pre>';
 //$testPrgm->saveVarToFile("testData", "ProtectedProgram_long_Resaved");
 
 

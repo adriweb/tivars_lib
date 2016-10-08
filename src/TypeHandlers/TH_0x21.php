@@ -32,9 +32,9 @@ class TH_0x21 implements ITIVarTypeHandler
             throw new \Exception('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
         }
 
-        $coeffR = TH_0x00::makeStringFromData(array_slice($data, 0, TH_0x00::dataByteCount));
+        $coeff = TH_0x00::makeStringFromData(array_slice($data, 0, TH_0x00::dataByteCount));
 
-        $str = ($coeffR !== '0') ? (dec2frac($coeffR) . '*π')  : '0';
+        $str = ($coeff !== '0') ? (dec2frac($coeff) . '*π') : '0';
 
         // Improve final display
         $str = str_replace('+1*', '+', $str); $str = str_replace('(1*',  '(',  $str);
