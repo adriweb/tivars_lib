@@ -8,10 +8,13 @@
 
 /*
  * TODO:
+ *
  * - varname restrictions for lists, matrix, strings...
- * - Idea from Lionel: appvar vartype support: would be useful to store/retrieve somewhat arbitrary input (binary and text, for instance).
- *                     setContentFromData/getRawContent and setContentFromString/getReadableContent should be good to use in these cases.
- *                     What out about NUL bytes, they've been known to not be liked much by some versions of TI-Connect.
+ *
+ * - From Lionel: arbitraty storage/retrieval support. Technically this is already "supported" as the user can already fill the data with whatever bytes.
+ *                But support could be improved: this could go into appvars (obvious choice), strings, and also pictures and images (for the 84+CSE and CE).
+ *                setContentFromData/getRawContent + setContentFromString/getReadableContent should be good to use in these cases (=> new typeHandlers/vartypes)
+ *                Watch out for NUL bytes in strings, they've been known to not be liked much by some versions of TI-Connect, at least on the 68k.
 */
 
 include_once "src/autoloader.php";
