@@ -7,8 +7,11 @@
  */
 
 /*
- TODO:
-  - varname restrictions for lists, matrix, strings...
+ * TODO:
+ * - varname restrictions for lists, matrix, strings...
+ * - Idea from Lionel: appvar vartype support: would be useful to store/retrieve somewhat arbitrary input (binary and text, for instance).
+ *                     setContentFromData/getRawContent and setContentFromString/getReadableContent should be good to use in these cases.
+ *                     What out about NUL bytes, they've been known to not be liked much by some versions of TI-Connect.
 */
 
 include_once "src/autoloader.php";
