@@ -51,11 +51,11 @@ class TH_0x1C implements ITIVarTypeHandler
         }
 
         $parts = [
-            ($subtype == 1 || $subtype == 3 ? '-' : '')  . ltrim(substr($dataStr,  9, 3), '0'),
-            ltrim(substr($dataStr, 15, 3), '0'),
-            ($subtype == 2 || $subtype == 3 ? '-' : '+') . ltrim(substr($dataStr,  6, 3), '0'),
-            ltrim(substr($dataStr, 12, 3), '0'),
-            ltrim(substr($dataStr,  3, 3), '0')
+            ($subtype == 1 || $subtype == 3 ? '-' : '')  . (string)((int)substr($dataStr, 9, 3)),
+            (string)((int)substr($dataStr, 15, 3)),
+            ($subtype == 2 || $subtype == 3 ? '-' : '+') . (string)((int)substr($dataStr, 6, 3)),
+            (string)((int)substr($dataStr, 12, 3)),
+            (string)((int)substr($dataStr,  3, 3))
         ];
 
         $str = '(' . $parts[0] . '*√(' . $parts[1] .')' . $parts[2] . '*√(' . $parts[3] .'))/'. $parts[4];
