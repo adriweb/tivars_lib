@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
+include_once 'ITIVarTypeHandler.php';
 
 // Type Handler for type 0x05: Program
 class TH_0x05 implements ITIVarTypeHandler
@@ -28,7 +28,7 @@ class TH_0x05 implements ITIVarTypeHandler
     public static function makeDataFromString($str = '', array $options = [])
     {
         $data = [ 0, 0 ]; // two bytes reserved for the size. Filled later
-        for ($strCursorPos = 0; $strCursorPos < mb_strlen($str); $strCursorPos++)
+        for ($strCursorPos = 0, $strCursorLen =  mb_strlen($str); $strCursorPos < $strCursorLen; $strCursorPos++)
         {
             for ($currentLength = self::$lengthOfLongestTokenName; $currentLength > 0; $currentLength--)
             {
@@ -61,7 +61,7 @@ class TH_0x05 implements ITIVarTypeHandler
     {
         if ($data === [])
         {
-            throw new \Exception("Empty data array. Needs to contain at least 2 bytes (size fields)");
+            throw new \InvalidArgumentException('Empty data array. Needs to contain at least 2 bytes (size fields)');
         }
 
         $langIdx = (isset($options['lang']) && $options['lang'] === 'fr') ? 1 : 0;
@@ -70,7 +70,7 @@ class TH_0x05 implements ITIVarTypeHandler
         array_shift($data); array_shift($data);
         if ($howManyBytes !== count($data))
         {
-            trigger_error("[Warning] Byte count (" . count($data) . ") and size field (" . $howManyBytes . ") mismatch!");
+            trigger_error('[Warning] Byte count (' . count($data) . ') and size field (' . $howManyBytes . ') mismatch!');
         }
 
         $errCount = 0;
@@ -84,7 +84,7 @@ class TH_0x05 implements ITIVarTypeHandler
             {
                 if ($nextToken === null)
                 {
-                    trigger_error("[Warning] Encountered an unfinished two-byte token! Setting the second byte to 0x00");
+                    trigger_error('[Warning] Encountered an unfinished two-byte token! Setting the second byte to 0x00');
                     $nextToken = 0x00;
                 }
                 $bytesKey = $nextToken + ($currentToken << 8);
@@ -194,7 +194,7 @@ class TH_0x05 implements ITIVarTypeHandler
             }
             fclose($handle);
         } else {
-            throw new \Exception("Could not open the tokens csv file");
+            throw new \RuntimeException('Could not open the tokens csv file');
         }
     }
 }

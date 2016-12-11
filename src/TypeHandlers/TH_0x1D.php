@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
+include_once 'ITIVarTypeHandler.php';
 
 // Type Handler for type 0x1D: ExactComplexRadical
 class TH_0x1D implements ITIVarTypeHandler
@@ -18,11 +18,11 @@ class TH_0x1D implements ITIVarTypeHandler
 
     public static function makeDataFromString($str = '', array $options = [])
     {
-        throw new \Exception("Unimplemented");
+        throw new \BadMethodCallException('Unimplemented');
 
         if ($str == '' || !is_numeric($str))
         {
-            throw new \Exception("Invalid input string. Needs to be a valid Exact Complex Radical");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid Exact Complex Radical');
         }
     }
 
@@ -30,7 +30,7 @@ class TH_0x1D implements ITIVarTypeHandler
     {
         if (count($data) !== self::dataByteCount)
         {
-            throw new \Exception('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
+            throw new \LengthException('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
         }
 
         $coeffR = TH_0x1C::makeStringFromData(array_slice($data, 0, TH_0x1C::dataByteCount));

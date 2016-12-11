@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
+include_once 'ITIVarTypeHandler.php';
 
 // Type Handler for type 0x00: Real
 class TH_0x00 implements ITIVarTypeHandler
@@ -20,7 +20,7 @@ class TH_0x00 implements ITIVarTypeHandler
     {
         if ($str == '' || !is_numeric($str))
         {
-            throw new \Exception("Invalid input string. Needs to be a valid real number");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid real number');
         }
         $number   = (float)$str;
         $exponent = (int)floor(log10(abs($number)));
@@ -46,7 +46,7 @@ class TH_0x00 implements ITIVarTypeHandler
     {
         if (count($data) !== self::dataByteCount)
         {
-            throw new \Exception('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
+            throw new \LengthException('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
         }
         $flags      = $data[0];
         $isNegative = ($flags >> 7 === 1);
@@ -55,7 +55,7 @@ class TH_0x00 implements ITIVarTypeHandler
         $number     = '';
         for ($i = 2; $i < self::dataByteCount; $i++)
         {
-            $number .= sprintf("%02X", $data[$i]);
+            $number .= sprintf('%02X', $data[$i]);
         }
         $number = substr($number, 0, 1) . '.' . substr($number, 1);
         $number = ($isNegative ? -1 : 1) * pow(10, $exponent) * ((float)$number);

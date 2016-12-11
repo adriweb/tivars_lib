@@ -15,7 +15,7 @@ class TIVarType
     private $name = 'Unknown';
     private $id   = -1;
     private $exts = [];
-    private $typeHandler = null;
+    private $typeHandler;
 
     /**
      * @return string
@@ -56,7 +56,7 @@ class TIVarType
         $typeID = (int)$typeID;
         if (TIVarTypes::isValidID($typeID))
         {
-            $typeID_hex = sprintf("%02X", $typeID);
+            $typeID_hex = sprintf('%02X', $typeID);
             $handlerName = "TH_0x{$typeID_hex}";
             $handlerIncludePath = __DIR__ . "/TypeHandlers/{$handlerName}.php";
             if (file_exists($handlerIncludePath))
@@ -64,11 +64,11 @@ class TIVarType
                 include_once($handlerIncludePath);
                 return 'tivars\TypeHandlers\\' . $handlerName;
             } else {
-                include_once('TypeHandlers/TH_Unimplemented.php');
+                include_once __DIR__ . '/TypeHandlers/TH_Unimplemented.php';
                 return 'tivars\TypeHandlers\\TH_Unimplemented';
             }
         } else {
-            throw new \Exception("Invalid type ID");
+            throw new \RuntimeException('Invalid type ID');
         }
     }
 
@@ -90,7 +90,7 @@ class TIVarType
             $instance->typeHandler = self::determineTypeHandler($id);
             return $instance;
         } else {
-            throw new \Exception("Invalid type ID");
+            throw new \RuntimeException('Invalid type ID');
         }
     }
 
@@ -110,7 +110,7 @@ class TIVarType
             $instance->typeHandler = self::determineTypeHandler($instance->id);
             return $instance;
         } else {
-            throw new \Exception("Invalid type name");
+            throw new \RuntimeException('Invalid type name');
         }
     }
 }

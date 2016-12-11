@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
+include_once 'ITIVarTypeHandler.php';
 
 // Type Handler for type 0x0C: Complex Number
 class TH_0x0C implements ITIVarTypeHandler
@@ -25,7 +25,7 @@ class TH_0x0C implements ITIVarTypeHandler
 
         if (!$isValid || count($matches) !== 3)
         {
-            throw new \Exception("Invalid input string. Needs to be a valid complex number (a+bi)");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid complex number (a+bi)');
         }
 
         $data = [];
@@ -35,7 +35,7 @@ class TH_0x0C implements ITIVarTypeHandler
             $coeff = $matches[$i+1];
             if (empty($coeff))
             {
-                $coeff = "0";
+                $coeff = '0';
             }
 
             $data = array_merge($data, TH_0x00::makeDataFromString($coeff));
@@ -55,7 +55,7 @@ class TH_0x0C implements ITIVarTypeHandler
     {
         if (count($data) !== TH_0x0C::dataByteCount)
         {
-            throw new \Exception('Invalid data array. Needs to contain ' . TH_0x0C::dataByteCount . ' bytes');
+            throw new \LengthException('Invalid data array. Needs to contain ' . TH_0x0C::dataByteCount . ' bytes');
         }
 
         $coeffR = TH_0x00::makeStringFromData(array_slice($data, 0, TH_0x00::dataByteCount));

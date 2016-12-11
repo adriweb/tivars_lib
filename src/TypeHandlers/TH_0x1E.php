@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
+include_once 'ITIVarTypeHandler.php';
 
 // Type Handler for type 0x1E: ExactComplexPi
 class TH_0x1E implements ITIVarTypeHandler
@@ -20,17 +20,17 @@ class TH_0x1E implements ITIVarTypeHandler
     {
         if ($str == '' || !is_numeric($str))
         {
-            throw new \Exception("Invalid input string. Needs to be a valid Exact Complex Pi number");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid Exact Complex Pi number');
         }
 
-        throw new \Exception("Unimplemented");
+        throw new \BadMethodCallException('Unimplemented');
     }
 
     public static function makeStringFromData(array $data = [], array $options = [])
     {
         if (count($data) !== self::dataByteCount)
         {
-            throw new \Exception('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
+            throw new \LengthException('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
         }
 
         $coeffR = TH_0x00::makeStringFromData(array_slice($data, 0, TH_0x00::dataByteCount));

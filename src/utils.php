@@ -8,6 +8,11 @@
 
 
 // Adapted from http://stackoverflow.com/a/32903747/378298
+/**
+ * @param int|float $num
+ * @param int|float $err
+ * @return string
+ */
 function dec2frac($num = 0.0, $err = 0.001)
 {
     if ($err <= 0.0 || $err >= 1.0)
@@ -73,4 +78,5 @@ function dec2frac($num = 0.0, $err = 0.001)
             return (string)(($n * $middle_d + $middle_n) * $sign) . '/' . (string)$middle_d;
         }
     }
+    return '???'; // should be unreachable.
 }

@@ -8,8 +8,8 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
-include_once "TH_0x0C.php";
+include_once 'ITIVarTypeHandler.php';
+include_once 'TH_0x0C.php';
 
 // Type Handler for type 0x0D: Complex list
 class TH_0x0D implements ITIVarTypeHandler
@@ -31,7 +31,7 @@ class TH_0x0D implements ITIVarTypeHandler
         }
         if ($str == '' || empty($arr) || !$formatOk || $numCount > 999)
         {
-            throw new \Exception("Invalid input string. Needs to be a valid complex list");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid complex list');
         }
 
         $data = [];
@@ -54,7 +54,7 @@ class TH_0x0D implements ITIVarTypeHandler
         if ($byteCount < 2+TH_0x0C::dataByteCount || (($byteCount - 2) % TH_0x0C::dataByteCount !== 0)
             || ($numCount !== (int)(($byteCount - 2) / TH_0x0C::dataByteCount)) || $numCount > 999)
         {
-            throw new \Exception('Invalid data array. Needs to contain 2+' . TH_0x0C::dataByteCount . '*n bytes');
+            throw new \LengthException('Invalid data array. Needs to contain 2+' . TH_0x0C::dataByteCount . '*n bytes');
         }
 
         $str = '{';

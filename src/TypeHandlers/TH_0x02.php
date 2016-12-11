@@ -8,8 +8,8 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
-include_once "TH_0x00.php";
+include_once 'ITIVarTypeHandler.php';
+include_once 'TH_0x00.php';
 
 // Type Handler for type 0x02: Matrix
 class TH_0x02 implements ITIVarTypeHandler
@@ -18,7 +18,7 @@ class TH_0x02 implements ITIVarTypeHandler
     {
         if (strlen($str) < 5 || substr($str, 0, 2) !== '[[' || substr($str, -2, 2) !== ']]')
         {
-            throw new \Exception("Invalid input string. Needs to be a valid matrix");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid matrix');
         }
         $matrix = explode('][', substr($str, 2, -2));
         $rowCount = count($matrix);
@@ -26,7 +26,7 @@ class TH_0x02 implements ITIVarTypeHandler
 
         if ($colCount > 255 || $rowCount > 255)
         {
-            throw new \Exception("Invalid input string. Needs to be a valid matrix (max col/row = 255)");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid matrix (max col/row = 255)');
         }
 
         foreach ($matrix as &$row)
@@ -34,7 +34,7 @@ class TH_0x02 implements ITIVarTypeHandler
             $row = explode(',', $row);
             if (count($row) !== $colCount)
             {
-                throw new \Exception("Invalid input string. Needs to be a valid matrix (consistent column count)");
+                throw new \InvalidArgumentException('Invalid input string. Needs to be a valid matrix (consistent column count)');
             }
         }
 
@@ -45,7 +45,7 @@ class TH_0x02 implements ITIVarTypeHandler
                 $numStr = trim($numStr);
                 if (!is_numeric($numStr))
                 {
-                    throw new \Exception("Invalid input string. Needs to be a valid matrix (real numbers inside)");
+                    throw new \InvalidArgumentException('Invalid input string. Needs to be a valid matrix (real numbers inside)');
                 }
             }
         }
@@ -74,7 +74,7 @@ class TH_0x02 implements ITIVarTypeHandler
         if (count($data) < 2+TH_0x00::dataByteCount || $colCount < 1 || $rowCount < 1 || $colCount > 255 || $rowCount > 255
             || (($byteCount - 2) % TH_0x00::dataByteCount !== 0) || ($colCount*$rowCount !== ($byteCount - 2) / TH_0x00::dataByteCount))
         {
-            throw new \Exception('Invalid data array. Needs to contain 1+1+' . TH_0x00::dataByteCount . '*n bytes');
+            throw new \LengthException('Invalid data array. Needs to contain 1+1+' . TH_0x00::dataByteCount . '*n bytes');
         }
 
         $str = '[';

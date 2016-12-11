@@ -8,8 +8,8 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
-include_once "TH_0x00.php";
+include_once 'ITIVarTypeHandler.php';
+include_once 'TH_0x00.php';
 
 // Type Handler for type 0x01: Real list
 class TH_0x01 implements ITIVarTypeHandler
@@ -31,7 +31,7 @@ class TH_0x01 implements ITIVarTypeHandler
         }
         if ($str == '' || empty($arr) || !$formatOk || $numCount > 999)
         {
-            throw new \Exception("Invalid input string. Needs to be a valid real list");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid real list');
         }
 
         $data = [];
@@ -54,7 +54,7 @@ class TH_0x01 implements ITIVarTypeHandler
         if ($byteCount < 2+TH_0x00::dataByteCount || (($byteCount - 2) % TH_0x00::dataByteCount !== 0)
             || ($numCount !== (int)(($byteCount - 2) / TH_0x00::dataByteCount)) || $numCount > 999)
         {
-            throw new \Exception('Invalid data array. Needs to contain 2+' . TH_0x00::dataByteCount . '*n bytes');
+            throw new \LengthException('Invalid data array. Needs to contain 2+' . TH_0x00::dataByteCount . '*n bytes');
         }
 
         $str = '{';

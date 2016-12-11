@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "TH_0x05.php";
+include_once 'TH_0x05.php';
 
 // Type Handler for type 0x06: Protected Program
 // Nothing else to handle than TH_0x05 (Program)

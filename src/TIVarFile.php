@@ -10,7 +10,7 @@
 
 namespace tivars;
 
-require_once "BinaryFile.php";
+require_once 'BinaryFile.php';
 
 class TIVarFile extends BinaryFile
 {
@@ -38,16 +38,16 @@ class TIVarFile extends BinaryFile
     ];
 
     /** @var TIVarType */
-    private $type = null;
+    private $type;
 
     /** @var TIModel */
-    private $calcModel = null;
+    private $calcModel;
 
-    private $computedChecksum = null;
-    private $inFileChecksum = null;
-    private $isFromFile = null;
+    private $computedChecksum;
+    private $inFileChecksum;
+    private $isFromFile;
 
-    private $corrupt = null;
+    private $corrupt;
 
     /*** Constructors ***/
 
@@ -64,7 +64,7 @@ class TIVarFile extends BinaryFile
             parent::__construct($filePath);
             if ($this->fileSize < 76) // bare minimum for header + a var entry
             {
-                throw new \Exception("This file is not a valid TI-[e]z80 variable file");
+                throw new \RuntimeException('This file is not a valid TI-[e]z80 variable file');
             }
             $this->makeHeaderFromFile();
             $this->makeVarEntryFromFile();
@@ -86,7 +86,7 @@ class TIVarFile extends BinaryFile
         {
             return new self($filePath);
         } else {
-            throw new \Exception("No file path given");
+            throw new \InvalidArgumentException('No file path given');
         }
     }
 
@@ -102,13 +102,13 @@ class TIVarFile extends BinaryFile
 
             if (!$instance->calcModel->supportsType($instance->type))
             {
-                throw new \Exception('This calculator model (' . $instance->calcModel->getName() . ') does not support the type ' . $instance->type->getName());
+                throw new \RuntimeException('This calculator model (' . $instance->calcModel->getName() . ') does not support the type ' . $instance->type->getName());
             }
 
             $instance->header = [
                 'signature'     =>  $instance->calcModel->getSig(),
                 'sig_extra'     =>  [ 0x1A, 0x0A, 0x00 ],
-                'comment'       =>  str_pad("Created by tivars_lib on " . date("M j, Y"), 42, "\0"),
+                'comment'       =>  str_pad('Created by tivars_lib on ' . date('M j, Y'), 42, "\0"),
                 'entries_len'   =>  0 // will have to be overwritten later
             ];
 
@@ -135,7 +135,7 @@ class TIVarFile extends BinaryFile
 
             return $instance;
         } else {
-            throw new \Exception("No type given");
+            throw new \InvalidArgumentException('No type given');
         }
     }
 
@@ -204,7 +204,7 @@ class TIVarFile extends BinaryFile
             }
             return $sum & 0xFFFF;
         } else {
-            throw new \Exception("No file loaded to compute checksum from");
+            throw new \RuntimeException('No file loaded to compute checksum from');
         }
     }
 
@@ -231,7 +231,7 @@ class TIVarFile extends BinaryFile
             fseek($this->file, $this->fileSize - 2);
             return $this->get_raw_bytes(1)[0] + ($this->get_raw_bytes(1)[0] << 8);
         } else {
-            throw new \Exception("No file loaded to compute checksum from");
+            throw new \RuntimeException('No file loaded to compute checksum from');
         }
     }
 
@@ -259,7 +259,7 @@ class TIVarFile extends BinaryFile
         $newName = preg_replace('/[^a-zA-Z0-9]/', '', $name);
         if ($newName !== $name || strlen($newName) > 8 || $newName === '' || is_numeric($newName[0]))
         {
-            throw new \Exception("Invalid name given. 8 chars (A-Z, 0-9) max, starting by a letter");
+            throw new \InvalidArgumentException('Invalid name given. 8 chars (A-Z, 0-9) max, starting by a letter');
         }
         $name = strtoupper(substr($name, 0, 8));
 
@@ -279,7 +279,7 @@ class TIVarFile extends BinaryFile
             $this->varEntry['data'] = $data;
             $this->refreshMetadataFields();
         } else {
-            throw new \Exception("No data given");
+            throw new \InvalidArgumentException('No data given');
         }
     }
 
@@ -297,7 +297,7 @@ class TIVarFile extends BinaryFile
             $this->calcModel = $model;
             $this->header['signature'] = $model->getSig();
         } else {
-            throw new \Exception("No model given");
+            throw new \InvalidArgumentException('No model given');
         }
     }
 
@@ -357,7 +357,7 @@ class TIVarFile extends BinaryFile
 
         $handle = fopen($fullPath, 'wb');
         if (!$handle) {
-            throw new \Exception('Could not open destination file: ' . $fullPath);
+            throw new \RuntimeException('Could not open destination file: ' . $fullPath);
         }
 
         $this->refreshMetadataFields();
@@ -376,7 +376,7 @@ class TIVarFile extends BinaryFile
                 {
                     case 'integer':
                         // The length fields are the only ones on 2 bytes.
-                        if ($key === "entries_len" || $key === "data_length" || $key === "data_length2")
+                        if ($key === 'entries_len' || $key === 'data_length' || $key === 'data_length2')
                         {
                             $bin_data .= chr($data & 0xFF) . chr(($data >> 8) & 0xFF);
                         } else {

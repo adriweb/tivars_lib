@@ -12,12 +12,12 @@ date_default_timezone_set('UTC');
 
 class BinaryFile
 {
-    protected $file = null;
-    protected $filePath = null;
-    protected $fileSize = null;
+    protected $file;
+    protected $filePath;
+    protected $fileSize;
 
     /**
-     * @param null $filePath
+     * @param string|null $filePath
      * @throws \Exception
      */
     protected function __construct($filePath = null)
@@ -30,15 +30,15 @@ class BinaryFile
                 $this->file = fopen($filePath, 'rb+');
                 if ($this->file === false)
                 {
-                    throw new \Exception("Can't open the input file");
+                    throw new \RuntimeException("Can't open the input file");
                 }
                 $this->filePath = $filePath;
                 $this->fileSize = fstat($this->file)['size'];
             } else {
-                throw new \Exception("No such file");
+                throw new \RuntimeException('No such file');
             }
         } else {
-            throw new \Exception("No file path given");
+            throw new \InvalidArgumentException('No file path given');
         }
     }
 
@@ -55,12 +55,12 @@ class BinaryFile
         {
             if ($bytes !== -1)
             {
-                return array_merge(unpack("C*", fread($this->file, $bytes)));
+                return array_merge(unpack('C*', fread($this->file, $bytes)));
             } else {
-                throw new \Exception("Invalid number of bytes to read");
+                throw new \InvalidArgumentException('Invalid number of bytes to read');
             }
         } else {
-            throw new \Exception("No file loaded");
+            throw new \RuntimeException('No file loaded');
         }
     }
 
@@ -79,10 +79,10 @@ class BinaryFile
             {
                 return fread($this->file, $bytes);
             } else {
-                throw new \Exception("Invalid number of bytes to read");
+                throw new \InvalidArgumentException('Invalid number of bytes to read');
             }
         } else {
-            throw new \Exception("No file loaded");
+            throw new \RuntimeException('No file loaded');
         }
     }
 
@@ -101,7 +101,7 @@ class BinaryFile
         {
             return $this->fileSize;
         } else {
-            throw new \Exception("No file loaded");
+            throw new \RuntimeException('No file loaded');
         }
     }
 

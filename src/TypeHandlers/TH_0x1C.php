@@ -8,7 +8,7 @@
 
 namespace tivars\TypeHandlers;
 
-include_once "ITIVarTypeHandler.php";
+include_once 'ITIVarTypeHandler.php';
 
 // Type Handler for type 0x1C: ExactRealRadical
 class TH_0x1C implements ITIVarTypeHandler
@@ -17,11 +17,11 @@ class TH_0x1C implements ITIVarTypeHandler
 
     public static function makeDataFromString($str = '', array $options = [])
     {
-        throw new \Exception("Unimplemented");
+        throw new \BadMethodCallException('Unimplemented');
 
         if ($str == '' || !is_numeric($str))
         {
-            throw new \Exception("Invalid input string. Needs to be a valid Exact Real Radical");
+            throw new \InvalidArgumentException('Invalid input string. Needs to be a valid Exact Real Radical');
         }
     }
 
@@ -29,25 +29,25 @@ class TH_0x1C implements ITIVarTypeHandler
     {
         if (count($data) !== self::dataByteCount)
         {
-            throw new \Exception('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
+            throw new \LengthException('Invalid data array. Needs to contain ' . self::dataByteCount . ' bytes');
         }
 
         $dataStr = '';
         foreach ($data as $val)
         {
-            $dataStr .= sprintf("%02X", $val);
+            $dataStr .= sprintf('%02X', $val);
         }
 
         $type = substr($dataStr, 0, 2);
         if (!($type === '1C' || $type === '1D')) // real or complex (two reals, see TH_1D)
         {
-            throw new \Exception('Invalid data bytes - invalid vartype: ' . $type);
+            throw new \InvalidArgumentException('Invalid data bytes - invalid vartype: ' . $type);
         }
 
         $subtype = substr($dataStr, 2, 1);
         if ($subtype < 0 || $subtype > 3)
         {
-            throw new \Exception('Invalid data bytes - unknown subtype: ' . $subtype);
+            throw new \InvalidArgumentException('Invalid data bytes - unknown subtype: ' . $subtype);
         }
 
         $parts = [
