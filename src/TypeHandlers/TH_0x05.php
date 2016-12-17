@@ -66,7 +66,7 @@ class TH_0x05 implements ITIVarTypeHandler
 
         $langIdx = (isset($options['lang']) && $options['lang'] === 'fr') ? 1 : 0;
 
-        $howManyBytes = ($data[0] & 0xFF) + (($data[1] << 8) & 0xFF00);
+        $howManyBytes = ($data[0] & 0xFF) + (($data[1] & 0xFF) << 8);
         array_shift($data); array_shift($data);
         if ($howManyBytes !== count($data))
         {

@@ -76,7 +76,7 @@ $goodTypeForCalc = TIVarFile::createNew(TIVarType::createFromName("Program"), "B
 $goodTypeForCalc->setContentFromData($testData);
 $test = $goodTypeForCalc->getReadableContent();
 $goodTypeForCalc->setContentFromString($test);
-echo $goodTypeForCalc->getReadableContent();
+echo $goodTypeForCalc->getReadableContent() . "\n";
 //$goodTypeForCalc->saveVarToFile();
 
 $badTypeForCalc = TIVarFile::createNew(TIVarType::createFromName('ExactComplexFrac'), 'Bla', TIModel::createFromName('83PCE'));
@@ -132,7 +132,7 @@ assert($testReal->getRawContent() === $newReal->getRawContent());
 
 
 $testRealList = TIVarFile::loadFromFile('testData/RealList.8xl');
-echo "Before: " . $testRealList->getReadableContent() . "\t" . "Now: ";
+echo "Before: " . $testRealList->getReadableContent() . "\n   Now: ";
 $testRealList->setContentFromString("{9, 0, .5, -6e-8}");
 echo $testRealList->getReadableContent() . "\n";
 //$testRealList->saveVarToFile("testData", 'RealList_new');
@@ -140,7 +140,7 @@ echo $testRealList->getReadableContent() . "\n";
 
 
 $testStandardMatrix = TIVarFile::loadFromFile('testData/Matrix_3x3_standard.8xm');
-echo "Before: " . $testStandardMatrix->getReadableContent() . "\t" . "Now: ";
+echo "Before: " . $testStandardMatrix->getReadableContent() . "\n   Now: ";
 $testStandardMatrix->setContentFromString("[[1,2,3][4,5,6][-7,-8,-9]]");
 $testStandardMatrix->setContentFromString("[[1,2,3][4,5,6][-7,-8,-9][1,2,3][4,5,6][-7,-8,-9]]");
 echo $testStandardMatrix->getReadableContent() . "\n";
@@ -149,7 +149,7 @@ echo $testStandardMatrix->getReadableContent() . "\n";
 
 
 $testComplex = TIVarFile::loadFromFile('testData/Complex.8xc'); // -5 + 2i
-echo "Before: " . $testComplex->getReadableContent() . "\t" . "Now : ";
+echo "Before: " . $testComplex->getReadableContent() . "\n   Now: ";
 assert($testComplex->getReadableContent() === '-5+2i');
 $newComplex = TIVarFile::createNew(TIVarType::createFromName("Complex"), "C");
 $newComplex->setContentFromString('-5+2i');
@@ -161,7 +161,7 @@ echo $newComplex->getReadableContent() . "\n";
 
 
 $testComplexList = TIVarFile::loadFromFile('testData/ComplexList.8xl');
-echo "Before: " . $testComplexList->getReadableContent() . "\t" . "Now: ";
+echo "Before: " . $testComplexList->getReadableContent() . "\n   Now: ";
 $testComplexList->setContentFromString("{9+2i, 0i, .5, -0.5+6e-8i}");
 echo $testComplexList->getReadableContent() . "\n";
 //$testComplexList->saveVarToFile('testData', 'ComplexList_new');
