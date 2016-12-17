@@ -17,6 +17,7 @@ class TH_0x05 implements ITIVarTypeHandler
     private static $tokens_NameToBytes = [];
     private static $lengthOfLongestTokenName = 0;
     private static $firstByteOfTwoByteTokens = [];
+    private static $squishedASMTokens = [ 0xBB6D, 0xEF69, 0xEF7B ]; // 83+/84+, 84+CSE, CE
 
     /**
      * Tokenizer
@@ -71,6 +72,12 @@ class TH_0x05 implements ITIVarTypeHandler
         if ($howManyBytes !== count($data))
         {
             trigger_error('[Warning] Byte count (' . count($data) . ') and size field (' . $howManyBytes . ') mismatch!');
+        }
+
+        $twoFirstBytes = ($data[1] & 0xFF) + (($data[0] & 0xFF) << 8);
+        if (in_array($twoFirstBytes, self::$squishedASMTokens, true))
+        {
+            return '[Error] This is a squished ASM program - cannnot preview it!';
         }
 
         $errCount = 0;
