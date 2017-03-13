@@ -95,7 +95,7 @@ class BinaryFile
         }
     }
 
-    function size()
+    public function size()
     {
         if ($this->file !== null)
         {
@@ -105,7 +105,7 @@ class BinaryFile
         }
     }
 
-    function __destruct()
+    public function __destruct()
     {
         $this->close();
     }

@@ -129,8 +129,7 @@ class TIVarFile extends BinaryFile
             if ($instance->calcModel->getFlags() < TIFeatureFlags::hasFlash)
             {
                 $instance->varEntry['entryMetaLen'] = [ self::varEntryOldLength, 0x00 ];
-                unset($instance->varEntry['version']);
-                unset($instance->varEntry['archivedFlag']);
+                unset($instance->varEntry['version'], $instance->varEntry['archivedFlag']);
             }
 
             return $instance;
@@ -187,7 +186,6 @@ class TIVarFile extends BinaryFile
     {
         return $this->type;
     }
-
 
 
     /*** Private actions ***/

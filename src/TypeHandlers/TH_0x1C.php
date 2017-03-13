@@ -44,7 +44,7 @@ class TH_0x1C implements ITIVarTypeHandler
             throw new \InvalidArgumentException('Invalid data bytes - invalid vartype: ' . $type);
         }
 
-        $subtype = substr($dataStr, 2, 1);
+        $subtype = $dataStr[2];
         if ($subtype < 0 || $subtype > 3)
         {
             throw new \InvalidArgumentException('Invalid data bytes - unknown subtype: ' . $subtype);

@@ -61,7 +61,7 @@ class TIVarType
             $handlerIncludePath = __DIR__ . "/TypeHandlers/{$handlerName}.php";
             if (file_exists($handlerIncludePath))
             {
-                include_once($handlerIncludePath);
+                include_once $handlerIncludePath;
                 return 'tivars\TypeHandlers\\' . $handlerName;
             } else {
                 include_once __DIR__ . '/TypeHandlers/TH_Unimplemented.php';

@@ -35,13 +35,17 @@ abstract class TIModels
     private static function insertModel($orderID, $flags, $name, $sig)
     {
         if (!isset(self::$models[$name]))
+        {
             self::$models[$name]  = ['orderID' => $orderID, 'flags' => $flags, 'sig' => $sig];
-
+        }
         if (!isset(self::$models[$flags]))
+        {
             self::$models[$flags] = ['orderID' => $orderID, 'name' => $name, 'sig' => $sig];
-
+        }
         if (!isset(self::$models[$sig]))
+        {
             self::$models[$sig]   = ['orderID' => $orderID, 'flags' => $flags, 'name' => $name];
+        }
     }
 
     // TODO : Research actual compatibility flags/"versions" from libtifiles, and maybe even TI ?

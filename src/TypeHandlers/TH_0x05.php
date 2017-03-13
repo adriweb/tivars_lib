@@ -38,7 +38,7 @@ class TH_0x05 implements ITIVarTypeHandler
                 {
                     $tokenValue = self::$tokens_NameToBytes[$currentSubString];
                     ($tokenValue > 0xFF) && array_push($data, $tokenValue >> 8);
-                    array_push($data, $tokenValue & 0xFF);
+                    $data[] = $tokenValue & 0xFF;
                     $strCursorPos += $currentLength - 1;
                     break;
                 }
@@ -126,8 +126,8 @@ class TH_0x05 implements ITIVarTypeHandler
 
     public static function reindentCodeString($str = '')
     {
-        $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)/mi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
-        $str = preg_replace('/([^\s])(Del|Eff)Var /mi', "$1\n$2Var ", $str);
+        $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)/umi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
+        $str = preg_replace('/([\S])(Del|Eff)Var /mi', "$1\n$2Var ", $str);
         $lines = explode("\n", $str);
         foreach($lines as $key => $line)
         {
@@ -184,7 +184,7 @@ class TH_0x05 implements ITIVarTypeHandler
                 {
                     if (!in_array(hexdec($tokenInfo[7]), self::$firstByteOfTwoByteTokens))
                     {
-                        array_push(self::$firstByteOfTwoByteTokens, hexdec($tokenInfo[7]));
+                        self::$firstByteOfTwoByteTokens[] = hexdec($tokenInfo[7]);
                     }
                     $bytes = hexdec($tokenInfo[8]) + (hexdec($tokenInfo[7]) << 8);
                 } else {
