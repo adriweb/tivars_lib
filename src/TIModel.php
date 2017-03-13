@@ -1,7 +1,7 @@
 <?php
 /*
  * Part of tivars_lib
- * (C) 2015-2016 Adrien 'Adriweb' Bertrand
+ * (C) 2015-2017 Adrien 'Adriweb' Bertrand
  * https://github.com/adriweb/TIs_lib
  * License: MIT
  */
