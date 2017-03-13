@@ -26,6 +26,12 @@ use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
+
+$testAppVar = TIVarFile::createNew(TIVarType::createFromName('AppVar'), 'TEST');
+$testAppVar->setContentFromString('ABCD1234C9C9'); // random but valid hex string
+assert($testAppVar->getReadableContent() === 'ABCD1234C9C9');
+
+
 $testReal42 = TIVarFile::createNew(TIVarType::createFromName("Real"), "R");
 $testReal42->setCalcModel(TIModel::createFromName("84+"));
 $testReal42->setContentFromString('9001.42');
