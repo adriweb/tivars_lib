@@ -15,7 +15,7 @@ class TH_0x15 implements ITIVarTypeHandler
 {
     public static function makeDataFromString($str = '', array $options = [])
     {
-        $formatOk = preg_match('/^(([0-9a-fA-F]{2})([0-9a-fA-F]{2})){2,}$/', $str) === 1;
+        $formatOk = preg_match('/^([0-9a-fA-F]{2})+$/', $str) === 1;
 
         $length = strlen($str);
         $bytes = $length / 2;
