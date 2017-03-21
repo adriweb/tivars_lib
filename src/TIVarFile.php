@@ -241,9 +241,10 @@ class TIVarFile extends BinaryFile
         // todo : recompute correctly for multiple var entries
         $this->varEntry['data_length2'] = $this->varEntry['data_length'] = count($this->varEntry['data']);
 
-        $this->header['entries_len'] = $this->varEntry['data_length']
-                                     + ($this->calcModel->getFlags() >= TIFeatureFlags::hasFlash) ? self::varEntryNewLength
-                                                                                                  : self::varEntryOldLength;
+        // The + 2 + 2 is because of the length of both length field themselves
+        $this->header['entries_len'] = 2 + 2 + $this->varEntry['data_length']
+                                     + ($this->calcModel->getFlags() >= TIFeatureFlags::hasFlash ? self::varEntryNewLength
+                                                                                                 : self::varEntryOldLength);
 
         $this->computedChecksum = $this->computeChecksumFromInstanceData();
     }
