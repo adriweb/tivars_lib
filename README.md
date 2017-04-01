@@ -36,6 +36,7 @@ _Note: The code throws exceptions for you to catch in case of trouble._
 | Protected Program         |     **✓**    |     **✓**    |
 | Complex                   |     **✓**    |     **✓**    |
 | Complex List              |     **✓**    |     **✓**    |
+| Application Variable      |     **✓**    |     **✓**    |
 | Exact Complex Fraction    |     **✓**    |     **✗**    |
 | Exact Real Radical        |     **✓**    |     **✗**    |
 | Exact Complex Radical     |     **✓**    |     **✗**    |
