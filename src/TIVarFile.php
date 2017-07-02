@@ -325,6 +325,7 @@ class TIVarFile extends BinaryFile
      *
      * @param   string $directory Directory to save the file to
      * @param   string $name      Name of the file, without the extension
+     * @return  string
      *
      * @throws \Exception (if output file can't be written to)
      */
@@ -401,6 +402,8 @@ class TIVarFile extends BinaryFile
         fclose($handle);
 
         $this->corrupt = false;
+
+        return $fullPath;
     }
 
 }
