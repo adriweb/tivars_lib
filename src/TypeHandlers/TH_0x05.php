@@ -118,14 +118,22 @@ class TH_0x05 implements ITIVarTypeHandler
 
         if (isset($options['reindent']) && $options['reindent'] === true)
         {
-            $str = self::reindentCodeString($str);
+            $reindent_opts = isset($options['reindent_lang']) ? $options['reindent_lang'] : [];
+            $str = self::reindentCodeString($str, $reindent_opts);
         }
 
         return $str;
     }
 
-    public static function reindentCodeString($str = '')
+    public static function reindentCodeString($str = '', array $options = [])
     {
+        if (isset($options['lang']))
+        {
+            $lang = $options['lang'];
+        } else {
+            $lang = (preg_match('/^\.[a-z.]/i', $str) === 1) ? 'Axe' : 'Basic';
+        }
+
         $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)/umi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
         $str = preg_replace('/([\S])(Del|Eff)Var /mi', "$1\n$2Var ", $str);
         $lines = explode("\n", $str);
@@ -134,7 +142,9 @@ class TH_0x05 implements ITIVarTypeHandler
             $lines[$key] = [ 0, $line ]; // indent, text
         }
 
-        $increaseIndentAfter = ['If', 'For', 'While', 'Repeat'];
+        $increaseIndentAfter   = ['If', 'For', 'While', 'Repeat'];
+        $decreaseIndentOfToken = ['Then', 'Else', 'End', 'ElseIf', 'EndIf', 'End!If'];
+        $closingTokens         = ['End', 'EndIf', 'End!If'];
         $nextIndent = 0;
         $oldFirstCommand = $firstCommand = '';
         foreach($lines as $key => $lineData)
@@ -150,15 +160,15 @@ class TH_0x05 implements ITIVarTypeHandler
 
             $lines[$key][0] = $nextIndent;
 
-            if (in_array($firstCommand, $increaseIndentAfter))
+            if (in_array($firstCommand, $increaseIndentAfter, true))
             {
                 $nextIndent++;
             }
-            if ($lines[$key][0] > 0 && ($firstCommand === 'Then' || $firstCommand === 'Else' || $firstCommand === 'End'))
+            if ($lines[$key][0] > 0 && in_array($firstCommand, $decreaseIndentOfToken, true))
             {
                 $lines[$key][0]--;
             }
-            if ($nextIndent > 0 && ($firstCommand === 'End' || ($oldFirstCommand === 'If' && $firstCommand !== 'Then')))
+            if ($nextIndent > 0 && (in_array($firstCommand, $closingTokens, true) || ($oldFirstCommand === 'If' && $firstCommand !== 'Then' && $lang !== 'Axe')))
             {
                 $nextIndent--;
             }
@@ -167,7 +177,7 @@ class TH_0x05 implements ITIVarTypeHandler
         $str = '';
         foreach($lines as $line)
         {
-            $str .= str_repeat(' ', $line[0]*4) . $line[1] . "\n";
+            $str .= str_repeat(' ', $line[0]*3) . $line[1] . "\n";
         }
 
         return $str;
