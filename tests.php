@@ -130,6 +130,15 @@ assert($testPrgm->getRawContent() === $newPrgm->getRawContent());
 
 
 
+$testPrgm42 = TIVarFile::createNew(TIVarType::createFromName("Program"), "asdf");
+$testPrgm42->setCalcModel(TIModel::createFromName("82A"));
+$testPrgm42->setContentFromString("Grande blabla:Disp \"Grande blabla");
+$testPrgm42->setVarName("Toto");
+assert($testPrgm42->getReadableContent() == "Grande blabla:Disp \"Grande blabla");
+//$testPrgm42->saveVarToFile("testData", "testMinTok_new");
+
+
+
 $testReal = TIVarFile::loadFromFile('testData/Real.8xn'); // -42.1337
 $newReal = TIVarFile::createNew(TIVarType::createFromName("Real"), "A");
 $newReal->setContentFromString('-42.1337');

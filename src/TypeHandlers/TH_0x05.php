@@ -29,9 +29,25 @@ class TH_0x05 implements ITIVarTypeHandler
     public static function makeDataFromString($str = '', array $options = [])
     {
         $data = [ 0, 0 ]; // two bytes reserved for the size. Filled later
+
+        $maxTokSearchLen = min(mb_strlen($str), self::$lengthOfLongestTokenName);
+
+        $isWithinString = false;
+
         for ($strCursorPos = 0, $strCursorLen =  mb_strlen($str); $strCursorPos < $strCursorLen; $strCursorPos++)
         {
-            for ($currentLength = self::$lengthOfLongestTokenName; $currentLength > 0; $currentLength--)
+            $currChar = mb_substr($str, 1);
+            if ($currChar === '"')
+            {
+                $isWithinString = !$isWithinString;
+            } else if ($currChar === "\n" || $currChar === '→')
+            {
+                $isWithinString = false;
+            }
+            /* isWithinString => minimum token length, otherwise maximal munch */
+            for ($currentLength = $isWithinString ? 1 : $maxTokSearchLen;
+                 $isWithinString ? ($currentLength <= $maxTokSearchLen) : ($currentLength > 0);
+                 $currentLength += ($isWithinString ? 1 : -1))
             {
                 $currentSubString = mb_substr($str, $strCursorPos, $currentLength);
                 if (isset(self::$tokens_NameToBytes[$currentSubString]))
@@ -44,9 +60,11 @@ class TH_0x05 implements ITIVarTypeHandler
                 }
             }
         }
+
         $actualDataLen = count($data) - 2;
         $data[0] = $actualDataLen & 0xFF;
         $data[1] = ($actualDataLen >> 8) & 0xFF;
+
         return $data;
     }
 
@@ -118,8 +136,8 @@ class TH_0x05 implements ITIVarTypeHandler
 
         if (isset($options['reindent']) && $options['reindent'] === true)
         {
-            $reindent_opts = isset($options['reindent_lang']) ? $options['reindent_lang'] : [];
-            $str = self::reindentCodeString($str, $reindent_opts);
+            $reindent_lang = isset($options['reindent_lang']) ? [ 'lang' => $options['reindent_lang'] ] : [];
+            $str = self::reindentCodeString($str, $reindent_lang);
         }
 
         return $str;
