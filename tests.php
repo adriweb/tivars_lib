@@ -28,8 +28,10 @@ use tivars\TIVarTypes;
 
 
 $testAppVar = TIVarFile::createNew(TIVarType::createFromName('AppVar'), 'TEST');
-$testAppVar->setContentFromString('ABCD1234C9C9'); // random but valid hex string
-assert($testAppVar->getReadableContent() === 'ABCD1234C9C9');
+$testAppVar->setContentFromString('ABCD1234C9C8C7C6'); // random but valid hex string
+assert($testAppVar->getReadableContent() === 'ABCD1234C9C8C7C6');
+assert(count($testAppVar->getRawContent()) === strlen('ABCD1234C9C8C7C6') / 2 + 2);
+//$testAppVar->saveVarToFile('testData', 'testAVnew');
 
 
 $testReal42 = TIVarFile::createNew(TIVarType::createFromName("Real"), "R");
