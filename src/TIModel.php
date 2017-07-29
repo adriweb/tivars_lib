@@ -73,7 +73,7 @@ class TIModel
             $instance->name = TIModels::getDefaultNameFromFlags($flags);
             return $instance;
         } else {
-            throw new \RuntimeException('Invalid version ID');
+            throw new \InvalidArgumentException('Invalid version compatibility flags');
         }
     }
 
@@ -93,7 +93,7 @@ class TIModel
             $instance->sig = TIModels::getSignatureFromName($name);
             return $instance;
         } else {
-            throw new \RuntimeException('Invalid version name');
+            throw new \InvalidArgumentException('Invalid version name');
         }
     }
 
@@ -113,7 +113,7 @@ class TIModel
             $instance->name = TIModels::getDefaultNameFromSignature($sig);
             return $instance;
         } else {
-            throw new \RuntimeException('Invalid version signature');
+            throw new \InvalidArgumentException('Invalid version signature');
         }
     }
 

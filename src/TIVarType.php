@@ -68,7 +68,7 @@ class TIVarType
                 return 'tivars\TypeHandlers\\TH_Unimplemented';
             }
         } else {
-            throw new \RuntimeException('Invalid type ID');
+            throw new \InvalidArgumentException('Invalid type ID');
         }
     }
 
@@ -90,7 +90,7 @@ class TIVarType
             $instance->typeHandler = self::determineTypeHandler($id);
             return $instance;
         } else {
-            throw new \RuntimeException('Invalid type ID');
+            throw new \InvalidArgumentException('Invalid type ID');
         }
     }
 
@@ -110,7 +110,7 @@ class TIVarType
             $instance->typeHandler = self::determineTypeHandler($instance->id);
             return $instance;
         } else {
-            throw new \RuntimeException('Invalid type name');
+            throw new \InvalidArgumentException('Invalid type name');
         }
     }
 }
