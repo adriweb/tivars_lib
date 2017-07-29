@@ -137,6 +137,10 @@ $testPrgm42->setVarName("Toto");
 assert($testPrgm42->getReadableContent() == "Grande blabla:Disp \"Grande blabla");
 //$testPrgm42->saveVarToFile("testData", "testMinTok_new");
 
+$testPrgm42->setArchived(true);
+assert($testPrgm42->getReadableContent() == "Grande blabla:Disp \"Grande blabla");
+//$testPrgm42->saveVarToFile("testData", "testMinTok_archived_new");
+
 
 
 $testReal = TIVarFile::loadFromFile('testData/Real.8xn'); // -42.1337

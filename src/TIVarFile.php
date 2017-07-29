@@ -307,6 +307,17 @@ class TIVarFile extends BinaryFile
         $this->refreshMetadataFields();
     }
 
+    public function setArchived($flag)
+    {
+        if ($this->calcModel->getFlags() >= TIFeatureFlags::hasFlash)
+        {
+            $this->varEntry['archivedFlag'] = ($flag === true) ? 1 : 0;
+            $this->refreshMetadataFields();
+        } else {
+            throw new \RuntimeException('Archived flag not supported on this calculator model');
+        }
+    }
+
     public function getRawContent()
     {
         return $this->varEntry['data'];
