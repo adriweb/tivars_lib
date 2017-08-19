@@ -27,6 +27,10 @@ use tivars\TIVarTypes;
 
 
 
+$testString = TIVarFile::loadFromFile('testData/ALLTOKS.8Xp');
+echo $testString->getReadableContent();
+
+
 $testAppVar = TIVarFile::createNew(TIVarType::createFromName('AppVar'), 'TEST');
 $testAppVar->setContentFromString('ABCD1234C9C8C7C6'); // random but valid hex string
 assert($testAppVar->getReadableContent() === 'ABCD1234C9C8C7C6');
