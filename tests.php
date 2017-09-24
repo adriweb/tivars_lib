@@ -26,9 +26,22 @@ use tivars\TIVarType;
 use tivars\TIVarTypes;
 
 
+$newPrgm = TIVarFile::createNew(TIVarType::createFromName('Program'), 'TESTTOK');
+$arr = [
+        0xBB, 0xED,
+        0xBB, 0xEE,
+        0xBB, 0xF2,
+        0xBB, 0xF3,
+];
 
-$testString = TIVarFile::loadFromFile('testData/ALLTOKS.8Xp');
-echo $testString->getReadableContent();
+array_unshift($arr, count($arr), 0);
+$newPrgm->setContentFromData($arr);
+$newPrgm->saveVarToFile('testData', 'testtoken');
+$testString = TIVarFile::loadFromFile('testData/testtoken.8xp');
+assert(strpos($testString->getReadableContent(), '[???]') === false);
+
+$testString = TIVarFile::loadFromFile('testData/ALLCHARS.8Xp');
+assert(strpos($testString->getReadableContent(), '[???]') === false);
 
 
 $testAppVar = TIVarFile::createNew(TIVarType::createFromName('AppVar'), 'TEST');
