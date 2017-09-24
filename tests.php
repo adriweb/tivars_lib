@@ -8,17 +8,11 @@
 
 /*
  * TODO:
- *
- * - varname restrictions for lists, matrix, strings...
- *
- * - From Lionel: arbitraty storage/retrieval support. Technically this is already "supported" as the user can already fill the data with whatever bytes.
- *                But support could be improved: this could go into appvars (obvious choice), strings, and also pictures and images (for the 84+CSE and CE).
- *                setContentFromData/getRawContent + setContentFromString/getReadableContent should be good to use in these cases (=> new typeHandlers/vartypes)
- *                Watch out for NUL bytes in strings, they've been known to not be liked much by some versions of TI-Connect, at least on the 68k.
+ *  - varname restrictions for lists, matrix, strings...
 */
 
-include_once 'src/autoloader.php';
-include_once 'src/TypeHandlers/TH_0x05.php';
+require_once __DIR__ . '/src/autoloader.php';
+require_once __DIR__ . '/src/TypeHandlers/TH_0x05.php';
 
 use tivars\TIModel;
 use tivars\TIVarFile;
