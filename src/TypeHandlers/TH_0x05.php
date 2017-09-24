@@ -152,7 +152,7 @@ class TH_0x05 implements ITIVarTypeHandler
             $lang = (preg_match('/^\.[a-z.]/i', $str) === 1) ? 'Axe' : 'Basic';
         }
 
-        $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)/umi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
+        $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)|(^"[^→]*$)/umi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
         $str = preg_replace('/([\S])(Del|Eff)Var /mi', "$1\n$2Var ", $str);
         $lines = explode("\n", $str);
         foreach($lines as $key => $line)

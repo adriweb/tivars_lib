@@ -133,6 +133,13 @@ $testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent'
 
 
 
+$testPrgm = TIVarFile::createNew(TIVarType::createFromName('Program'), 'asdf');
+$testPrgm->setContentFromString('"http://TIPlanet.org');
+$testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
+assert(trim($testPrgmcontent) === '"http://TIPlanet.org');
+
+
+
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName('Program'));
 $newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));
