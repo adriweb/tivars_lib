@@ -140,6 +140,13 @@ assert(trim($testPrgmcontent) === '"http://TIPlanet.org');
 
 
 
+$testPrgm = TIVarFile::createNew(TIVarType::createFromName('Program'), 'asdf');
+$testPrgm->setContentFromString('Pause 42:Pause 43:Disp "","Bouh la =/*: déf","suite :"," OK');
+$testPrgmcontent = $testPrgm->getReadableContent(['prettify' => true, 'reindent' => true]);
+assert(trim($testPrgmcontent) === "Pause 42\nPause 43\n" . 'Disp "","Bouh la =/*: déf","suite :"," OK');
+
+
+
 $testPrgm = TIVarFile::loadFromFile('testData/Program.8xp');
 $newPrgm = TIVarFile::createNew(TIVarType::createFromName('Program'));
 $newPrgm->setContentFromString($testPrgm->getReadableContent(['lang' => 'en']));

@@ -152,9 +152,32 @@ class TH_0x05 implements ITIVarTypeHandler
             $lang = (preg_match('/^\.[a-z.]/i', $str) === 1) ? 'Axe' : 'Basic';
         }
 
-        $str = preg_replace_callback('/"[^$→"\n]+[→"$\n]|(\:)|(^"[^→]*$)/umi', function($m) { return empty($m[1]) ? $m[0] : "\n"; }, $str);
         $str = preg_replace('/([\S])(Del|Eff)Var /mi', "$1\n$2Var ", $str);
+
         $lines = explode("\n", $str);
+
+        // Inplace-replace the appropriate ":" by new-line chars (ie, by inserting the split string in the $lines array)
+        for ($idx = 0, $max = count($lines); $idx < $max; $idx++)
+        {
+            $line = $lines[$idx];
+            $isWithinString = false;
+            for ($strIdx = 0, $strLen = mb_strlen($line); $strIdx < $strLen; $strIdx++)
+            {
+                $currChar = mb_substr($line, $strIdx, 1);
+                if ($currChar === ':' && !$isWithinString)
+                {
+                    $lines[$idx] = mb_substr($line, 0, $strIdx); // replace "old" line by lhs
+                    array_splice($lines, $idx + 1, 0, mb_substr($line, $strIdx + 1)); // inserting rhs
+                    $max++; // the count changed
+                    break;
+                } elseif ($currChar === '"') {
+                    $isWithinString = !$isWithinString;
+                } elseif ($currChar === "\n" || $currChar === '→') {
+                    $isWithinString = false;
+                }
+            }
+        }
+
         foreach($lines as $key => $line)
         {
             $lines[$key] = [ 0, $line ]; // indent, text
