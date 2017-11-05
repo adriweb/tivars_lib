@@ -12,9 +12,9 @@ date_default_timezone_set('UTC');
 
 class BinaryFile
 {
-    protected $file;
-    protected $filePath;
-    protected $fileSize;
+    protected $file     = null;
+    protected $filePath = '';
+    protected $fileSize = 0;
 
     /**
      * @param string|null $filePath
@@ -97,12 +97,7 @@ class BinaryFile
 
     public function size()
     {
-        if ($this->file !== null)
-        {
-            return $this->fileSize;
-        } else {
-            throw new \RuntimeException('No file loaded');
-        }
+        return $this->fileSize;
     }
 
     public function __destruct()

@@ -75,6 +75,7 @@ class TIVarFile extends BinaryFile
                 $this->corrupt = true;
             }
             $this->type = TIVarType::createFromID($this->varEntry['typeID']);
+            $this->close(); // let's free the resource up as early as possible
         } else {
             $this->isFromFile = false;
         }
@@ -346,7 +347,6 @@ class TIVarFile extends BinaryFile
         if ($this->isFromFile && $directory === '')
         {
             $fullPath = $this->filePath;
-            $this->close();
         } else {
             if ($name === '')
             {
